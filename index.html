@@ -2,16 +2,27 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weiterleitung...</title>
-
     <script>
-        window.location.href = "https://sites.google.com/view/rr-ma25";
-    </script>    
+        let redirectTimeout = setTimeout(function() {
+            window.location.href = "https://sites.google.com/view/rr-ma25";
+        }, 1500);
+
+        function stopRedirect() {
+            clearTimeout(redirectTimeout);
+            alert("Weiterleitung gestoppt. Du kannst die Seite jetzt auf dem Home-Bildschirm speichern.");
+        }
+
+        document.addEventListener("click", stopRedirect);
+        document.addEventListener("keydown", stopRedirect);
+    </script>
 
     <link rel="icon" href="favicon.jpg" type="image/jpg">
     <link rel="apple-touch-icon" href="apple-icon.jpg">
 </head>
 <body>
+    <p>Drücke auf eine Taste oder tippe auf den Bildschirm, wenn du die HexaLengua Seite speichern möchtest. Ansonsten wirst du jeden Moment weitergeleitet.</p>
     <p>Falls die Weiterleitung nicht funktioniert, klicken Sie <a href="https://sites.google.com/view/rr-ma25">hier</a>.</p>
 </body>
 </html>
