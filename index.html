@@ -3,26 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weiterleitung...</title>
-    <script>
-        let redirectTimeout = setTimeout(function() {
-            window.location.href = "https://sites.google.com/view/rr-ma25";
-        }, 1500);
-
-        function stopRedirect() {
-            clearTimeout(redirectTimeout);
-            alert("Weiterleitung gestoppt. Sie können die Seite jetzt auf dem Home-Bildschirm speichern.");
-        }
-
-        document.addEventListener("click", stopRedirect);
-        document.addEventListener("keydown", stopRedirect);
-    </script>
-
+    <title>HexaLengua</title>
     <link rel="icon" href="favicon.jpg" type="image/jpg">
     <link rel="apple-touch-icon" href="apple-icon.jpg">
+    <style>
+        :root {
+        --primary: #111;
+        --accent: #e63946;
+        --accent-hover: #c82333;
+        --bg: #fafafa;
+        --font: system-ui, sans-serif;
+        }
+
+        * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        }
+
+        body {
+        background: var(--bg);
+        font-family: var(--font);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: var(--primary);
+        }
+
+        .container {
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        }
+
+        .button {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 12px;
+        font-size: 1rem;
+        background: var(--accent);
+        color: #fff;
+        border: 2px solid var(--accent);
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.15s ease-in-out;
+        }
+
+        .button:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+        }
+
+        a {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <p>Drücken Sie auf eine Taste oder tippen Sie auf den Bildschirm, wenn Sie die HexaLengua Seite speichern möchten. Ansonsten werden Sie jeden Moment weitergeleitet.</p>
-    <p>Falls die Weiterleitung nicht funktioniert, klicken Sie <a href="https://sites.google.com/view/rr-ma25">hier</a>.</p>
+    <div class="container">
+        <a href="https://sites.google.com/view/rr-ma25" class="button">Grammatik (webBook)</a>
+        <a href="https://sites.google.com/view/rr-ma25/webcards-vokabeln" class="button">Vokabeln (webCards)</a>
+    </div>
 </body>
 </html>
