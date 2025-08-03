@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 16</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Mathematik</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        die Nummer,el número,numerus,le numéro,il numero,il numer,number
+        null,cero,nulla / a / um,zéro,zero,nul,zero
+        eins,uno,unus / a / um,un,uno,in,one
+        zwei,dos,duo / ae / uo,deux,due,dus,two
+        drei,tres,tres / tres / tria,trois,tre,treis,three
+        vier,cuatro,quattuor,quatre,quattro,quater,four
+        fünf,cinco,quinque,cinq,cinque,tschun,five
+        sechs,seis,sex,six,sei,sis,six
+        sieben,siete,septem,sept,sette,siat,seven
+        acht,ocho,octo,huit,otto,otg,eight
+        neun,nueve,novem,neuf,nove,nov,nine
+        zehn,diez,decem,dix,dieci,diesch,ten
+        elf,once,undecim,onze,undici,endisch,eleven
+        zwölf,doce,duodecim,douze,dodici,dudisch,twelve
+        dreizehn,trece,tredecim,treize,tredici,tredisch,thirteen
+        vierzehn,catorce,quattuordecim,quatorze,quattordici,quitordisch,fourteen
+        fünfzehn,quince,quindecim,quinze,quindici,quendisch,fifteen
+        sechzehn,dieciséis,sedecim,seize,sedici,sedisch,sixteen
+        siebzehn,diecisiete,septendecim,dix-sept,diciassette,gissiat,seventeen
+        achtzehn,dieciocho,duodeviginti,dix-huit,diciotto,schotg,eighteen
+        neunzehn,diecinueve,undeviginti,dix-neuf,diciannove,scheniv,nineteen
+        zwanzig,veinte,viginti,vingt,venti,vegn,twenty
+        einundzwanzig,veintiuno,viginti unus,vingt-et-un,ventuno,ventgin,twenty-one
+        zweiundzwanzig,veintidós,viginti duo,vingt-deux,ventidue,ventgadus,twenty-two
+        dreiundzwanzig,veintitrés,viginti tres,vingt-trois,ventitré,ventgatreis,twenty-three
+        vierundzwanzig,veinticuatro,viginti quattuor,vingt-quatre,ventiquattro,ventgaquater,twenty-four
+        fünfundzwanzig,veinticinco,viginti quinque,vingt-cinq,venticinque,ventgatschun,twenty-five
+        sechsundzwanzig,veintiséis,viginti sex,vingt-six,ventisei,ventgasis,twenty-six
+        siebenundzwanzig,veintisiete,viginti septem,vingt-sept,ventisette,ventgasiat,twenty-seven
+        achtundzwanzig,veintiocho,duodetriginta,vingt-huit,ventotto,ventgotg,twenty-eight
+        neunundzwanzig,veintinueve,nudetriginta,vingt-neuf,ventinove,ventganov,twenty-nine
+        dreissig,treinta,triginta,trente,trenta,trenta,thirty
+        vierzig,cuarenta,quadraginta,quarante,quaranta,curonta,forty
+        fünfzig,cincuenta,quinquaginta,cinquante,cinquanta,tschunconta,fifty
+        sechzig,sesenta,sexaginta,soixante,sessanta,sissonta,sixty
+        siebzig,setenta,septuaginta,soixante-dix,settanta,siatonta,seventy
+        achtzig,ochenta,octoginta,quatre-vingts,ottanta,otgonta,eighty
+        neunzig,noventa,nonaginta,quatre-vingt-dix,novanta,navonta,ninety
+        hundert,ciento,centum,cent,cento,tschien,one hundred
+        zweihundert,doscientos,ducenti / ae / a,deux cents,duecento,duatschien,two hundred
+        dreihundert,trescientos,trecenti / ae / a,trois cents,trecento,treitschien,three hundred
+        vierhundert,cuatrocientos,quadringenti / ae / a,quatre cents,quattrocento,quatertschien,four hundred
+        fünfhundert,quinientos,quingenti / ae / a,cinq cents,cinquecento,tschuntschien,five hundred
+        tausend,mil,mille,mille,mille,melli,thousand
+        zweitausend,dos mil,duo milia,deux mille,duemila,duamelli,two thousand
+        dreitausend,tres mil,tria milia,trois mille,tremila,treimelli,three thousand
+        die Million,un millón,decies centena milia,le million,il milione,il milliun,million
+        erste/r/s,primero/-a,primus/a/um,premier/-ère,primo/-a,igl emprem,first
+        zweite/r/s,segundo/-a,secundus/a/um,deuxième,secondo/-a,il secund,second
+        dritte/r/s,tercero/-a,tertius/a/um,troisième,terzo/-a,il tierz,third
+        vierte/r/s,cuarto/-a,quartus/a/um,quatrième,quarto/-a,il quart,fourth
+        fünfte/r/s,quinto/-a,quintus/a/um,cinquième,quinto/-a,il tschunavel,fifth
+        sechste/r/s,sexto/-a,sextus/a/um,sixième,sesto/-a,il sisavel,sixth
+        siebte/r/s,séptimo/-a,septimus/a/um,septième,settimo/-a,il siatavel,seventh
+        achte/r/s,octavo/-a,octavus/a/um,huitième,ottavo/-a,igl otgavel,eighth
+        neunte/r/s,noveno/-a,nonus/a/um,neuvième,nono/-a,il novavel,ninth
+        zehnte/r/s,décimo/-a,decimus/a/um,dixième,decimo/-a,il dieschavel,tenth
+        zwanzigste/r/s,vigésimo/-a,vicesimus/a/um,vingtième,ventesimo/-a,il vegnavel,twentieth
+        hundertste/r/s,centésima/-a,centesimus/a/um,centième,centesimo/-a,il tschienavel,hundredth
+        tausendste/r/s,milésima/-a,millesimus/a/um,millième,millesimo/-a,il melliavel,thousandth
+        bisschen,un poco,paululum,un peu,un po’ di,in tec,little
+        das Kilo(gramm),el kilo(gramo),chiliogrammum,le kilo(gramme),il chilo(grammo),il kilo(gram),kilo(gram)
+        der Liter,el litro,litra,le litre,il litro,il liter,litre
+        der Rest,el resto,reliquum,le reste,il resto,il rest,rest
+        die Menge,la cantidad,copia,la quantité,la quantità,la quantitad,amount
+        das Viertel,la cuarta parte,quarta pars,le quart,il quarto,il quart,quarter
+        das Pfund,la libra,libra,la livre,mezzo chilo,il fun,pound
+        halb,la mitad,dimidius,moitié,mezzo / -a,miez,half
+        der Teil,la parte,pars,la partie,la parte,la part,part
+        das Stück,la pieza,pars,le morceau,il pezzo,il toc,piece
+        das Mindeste,lo menos,minimum,le moins,il minimo,il minimum,least
+        die Portion,la porción,pars,la portion,la porzione,la porziun,portion
+        plus,más,plus,plus,più,plus,plus
+        minus,menos,minus,moins,meno,minus,minus
+        mal,veces,multiplicatus,fois,volte,ga,times
+        geteilt durch,dividido por,divisus / a / um,divisé par,diviso per,partiu tras,divided by
+        ist gleich,es igual a,sunt,est égal à,è uguale a,ei tuttina sco / dat,is equal to
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

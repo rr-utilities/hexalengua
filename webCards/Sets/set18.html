@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 18</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Schlüsselbegriffe (Verben)</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        umarmen,abrazar,amplecti,étreindre,abbracciare,embratschar,embrace
+        öffnen,abrir,aperire,ouvrir,aprire,arver,open
+        spülen,aclarar,eluere,rincer,lavare i piatti,derschentar,rinse
+        (sich) rasieren,afeitarse,rasitare,(se) raser,farsi la barba,far la barba,shave
+        schütteln,agitar,agitare,secouer,agitare,scurlar,shake
+        sparen,ahorrar,parcere,économiser,risparmiare,spargnar,save
+        zu Mittag essen,almorzar,cenare,déjeuner,pranzare,gentar,eat lunch
+        mieten,alquilar,conducere,louer,affittare,prender a tscheins,rent
+        lieben,amar,amare,aimer,amare,carezar,love
+        ausschalten,apagar,exstinguere,éteindre,spegnere,tschentar ora,switch off
+        parken,aparcar,stare,garer,parcheggiare,parcar,parking
+        lernen,aprender,discere,apprendre,imparare,emprender,learning
+        brennen,arde,ardere,brûler,bruciare,barschar,burn
+        streiten,argumentar,litigare,se disputer,litigare,sescagnar,argue
+        jdm. erschrecken,asustar a alguien,terrere,faire peur à qn,spaventare qu,far pigliar tema enzatgi,frighten someone
+        helfen,ayudar,adiuvare,aider,aiutare,gidar,to help
+        aussteigen,bajarse,exire,descendre,scendere,sortir,gett of
+        trinken,beber,bibere,boire,bere,beiber,drink
+        küssen,besar,osculari,embrasser,baciare,dar ina buna / bitschar,kiss
+        suchen,buscar,quaerere,chercher,cercare,encurir,search
+        rechnen,calcular,computare,calculer,contare,quintar,calculate
+        sich beruhigen,calmarse,acquiescere,se calmer,calmarsi,secalmar,calm down
+        wechseln,cambiar,mutari,changer,cambiare,midar,change
+        gehen,caminar,ambulare,marcher,camminare,ir a pei,walk
+        singen,cantar,cantare,chanter,cantare,cantar,sing
+        feiern,celebrar,celebrare,fêter,festeggiare,festivar,celebrate
+        zu Abend essen,cenar,cenare,dîner,cenare,tschenar,eat dinner
+        schliessen,cerrar,claudere,fermer,chiudere,serrar,close
+        aufhängen,colgar,pendere,accrocher,appendere,pender si,hang up
+        essen,comer,manducare,manger,mangiare,magliar,eat
+        benehmen,comportarse,se gerere,se comporter,comportarsi,sedepurtar,behave
+        verstehen,comprender,intelligere,comprendre,capire,capir,understanding
+        verabreden,concertar una cita,constituere,prendre rendez-vous,darsi un appuntamento,far giu,make an appointment
+        fahren,conducir,vehi,conduire,condurre,carrar / ir cun …,drive
+        gerührt sein,conmoverse,(com)moveri,être ému,commuoversi,esser commuentaus / commuentada,to be moved
+        kennen,conocer,scire,connaître,conoscere,enconuscher,know
+        aufbewahren,conservar,conservare,conserver,conservare,salvar,store
+        zählen,contar,numerare,compter,contare,dumbrar,count
+        rennen,correr,currere,courir,correre,cuorer,run
+        schneiden,cortar,secare,couper,tagliare,tagliar,cut
+        wachsen,crecer,crescere,grandir,crescere,crescher,grow
+        glauben,creer,credere,croire,credere,crer,believe
+        sorgen,cuidar,curare,s'inquiéter,preoccuparsi,sefar quitaus,caring
+        spazieren gehen,dar un paseo,ambulare,se promener,andare a spasso,ir a spass,go for a walk
+        sich beeilen,darse prisa,festinare,se dépêcher,sbrigarsi,far vinavon,hurry
+        sollen,deber,debere,devoir,dovere,duer,should
+        sagen,decir,dicere,dire,dire,dir,say
+        verabschieden,despedirse,vale dicere,dire au revoir,salutare,dar adia,say goodbye
+        verlassen,dejar,relinquere,quitter,abbandonare,bandunar,leave
+        lassen,dejar,desinere,laisser,lasciare,schar,leave
+        hereinlassen,dejar entrar,admittere,laisser entrer,fare entrare,schar entrar,let in
+        sich ausruhen,descansar,(re)quiescere,se reposer,riposarsi,ruassar,rest
+        beschreiben,describir,describere,décrire,descrivere,descriver,describe
+        entdecken,descubrir,invenire,découvrir,scoprire,scuvierer,discover
+        wünschen,desear,optare,souhaiter,desiderare,giavischar,wish
+        aufwachen,despertar,expergisci,se réveiller,svegliarsi,levar,wake up
+        geniessen,disfrutar,frui,jouir,godersi,guder,enjoy
+        unterscheiden,distinguir,discernere,distinguer,distinguere,differenziar,distinguish
+        schlafen,dormir,dormire,dormir,dormire,durmir,to sleep
+        einschlafen,dormirse,obdormiscere,s’endormir,addormentarsi,sedurmentar,to fall asleep
+        dauern,durar,durare,durer,durare,cuzzar,last
+        einschalten,encender,accendere,allumer,accendere,tschentar en,switch on
+        finden,encontrar,invenire,trouver,trovare,anflar,find
+        sich ärgern,enfedarse,indignari,se mettre en colère,arrabbiarsi,segrittentar,anger
+        lehren,enseñar,docere,enseigner,insegnare,instruir,teach
+        hereinkommen,entrar,intrare,entrer,entrare,entrar,come in
+        schreiben,escribir,scribere,écrire,scrivere,scriver,to write
+        zuhören,escuchar,audire,écouter,ascoltare,tedlar tier,listen
+        warten,esperar,exspectare,attendre,aspettare,spitgar,wait
+        stehen,estar de pie,stare,se tenir debout,stare in piedi,star,stand
+        lernen,estudiar,discere,apprendre,studiare,emprender,study
+        erklären,explicar,explicare,expliquer,spiegare,declarar,explain
+        fehlen,faltar,abesse,manquer,mancare,muncar,missing
+        unterschreiben,firmar,subscribere,signer,firmare,suttascriver,sign
+        ausgeben,gastar,impendere,dépenser,spendere,dar ora,spend
+        umdrehen,girar,circumagi,se retourner,girare,volver,turn round
+        schreien,gritar,clamare,crier,urlare,sgargnir,shout
+        gefallen,gustar,placere,plaire,piacere,haver bugen / plascher,please
+        sprechen,hablar,dicere / loqui,parler,parlare,tschintschar,talk
+        verletzen,herir,violare,blesser,ferire,blessar,hurt
+        kochen,hervir,coquere,cuire,cucinare,cuschinar,boil
+        sich interessieren,interesarse,studere,s'intéresser,interessarsi,s’interessar,to be interested in
+        unterbrechen,interrumpir,interrumpere,interrompre,interrompere,interrumper,interrupt
+        einladen,invitar,invitare,inviter,invitare,envidar,invite
+        gehen,ir,ire,partir,partire,ir,go
+        einkaufen,ir de compras,(co)emere,faire les courses,fare la spesa,cumprar (en),go shopping
+        spielen,jugar,ludere,jouer,giocare,far termagls,playing
+        die Wäsche waschen,lavar la ropa,linteam lavare,laver le linge,lavare i panni,far lischiva / lavar il resti,do the laundry
+        sich waschen,lavarse,lavare,se laver,lavarsi,selavar,to wash
+        lesen,leer,legere,lire,leggere,leger,to read
+        hochheben,levantar,levare,lever,alzare,alzar,to lift up
+        aufstehen,levantarse,surgere,se lever,alzarsi,levar,get up
+        rufen,llamar,vocare,appeler,chiamare,clamar,call
+        anrufen,llamar a,appellare,appeler,chiamare,telefonar,call
+        ankommen,llegar,advenire,arriver,arrivare,arrivar,arrive
+        füllen,llenar,implere,remplir,riempire,emplenir,fill
+        tragen,llevar,portare,porter,portare,purtar,carry
+        weinen,llorar,flere,pleurer,piangere,bargir,cry
+        fluchen,maldecir,maledicta iactare,jurer,imprecare,sgiavlar,curse
+        töten,matar,occidere,tuer,uccidere,mazzar,kill
+        lügen,mentir,mentiri,mentir,dire una bugia,dir schulas,lie
+        schauen,mirar,spectare,regarder,guardare,mirar,look
+        ärgern,molestar,irritare,énerver,arrabbiare,vilentar,annoy
+        sterben,morir,mori,mourir,morire,murir,die
+        zeigen,mostrar,monstrare,montrer,far vedere,mussar,show
+        bewegen,moverse,movere,se déplacer,muoversi,muentar,move
+        schwimmen,nadar,natare,nager,nuotare,senudar,swim
+        brauchen,necesitar,egere,avoir besoin de,avere bisogno di,duvrar,need
+        beachten,observar,observare,observer,rispettare,risguardar,observe
+        bekommen,obtener,accipere,obtenir,ricevere,survegnir,get
+        hassen,odiar,odisse,détester,odiare,oidar / hassegiar,hate
+        anbieten,ofrecer,offerre,offrir,offrire,offerir,offer
+        hören,oír,audire,entendre,sentire,udir,hear
+        riechen,oler,olfacere,sentir,odorare,ferdar,smell
+        vergessen,olvidar,oblivisci,oublier,dimenticare,emblidar,forget
+        zahlen,pagar,solvere,payer,pagare,pagar,pay
+        anhalten,parar,(subsistere),s'arrêter,fermarsi,fermar / tener eri,stop
+        teilnehmen,participar,interesse,participer,partecipare,separticipar,take part
+        verbringen,pasar,agere,passer,passare,passentar,spend
+        bestellen,pedir,arcessere,commander,ordinare,empustar,order
+        ausleihen,pedir prestado,commodare,emprunter,prestare,emprestar,borrow
+        denken,pensar,cogitare,penser,pensare,patertgar,think
+        verlieren,perder,amittere,perdre,perdere,piardar / perder,lose
+        bleiben,permanecer,manere,rester,rimanere,restar / star,stay
+        gehören,pertenecer,esse + Gen,appartenir,appartenere,s’udir / appartener,belong
+        können,poder,posse,pouvoir,potere,saver,can
+        dürfen,poder,licet,avoir droit,potere,astgar,may
+        fragen,preguntar,quaerere,demander,domandare,dumandar,ask
+        sich Sorgen machen,preocuparse,metuere,s'inquiéter,preoccuparsi,sefar quitaus,worry
+        vorbereiten,preparar,parare,préparer,preparare,preparar,prepare
+        verbieten,prohibir,prohibere,interdire,proibire,scumandar,forbid
+        versprechen,prometer,promittere,promettre,promettere,empermetter,promise
+        schützen,proteger,protegere,protéger,proteggere,proteger,protect
+        drücken,pulsar,premere,presser,stringere,smaccar,press
+        sich beschweren,quejarse,queri,se plaindre,lamentarsi,selamentar,complain
+        wollen,querer,velle,vouloir,volere,vuler,want
+        abholen,recoger,abducere,aller chercher,andare a prendere,vegnir per,pick up
+        empfehlen,recomendar,suadere,recommander,consigliare,cussegliar,recommend
+        erkennen,reconocer,cognoscere,reconnaître,riconoscere,(r)enconuscher,recognise
+        erinnern,recordar,admonere,se souvenir,ricordare,regurdar,remember
+        tanken,repostar,bencinum recipere,faire le plein,fare rifornimento,tancar,refuel
+        reservieren,reservar,reservare,réserver,prenotare,reservar,make a reservation
+        atmen,respirar,spirare,respirer,respirare,trer flad / fladar,breathe
+        wissen,saber,scire,savoir,sapere,saver,know
+        schmecken,saborear,sapere,goûter,sapere,gustar,taste
+        hinausgehen,salir,exire,sortir,uscire,extrar,to go outside
+        grüssen,saludar,salutare,saluer,salutare,salidar,greet
+        folgen,seguir,sequi,suivre,seguire,suandar,follow
+        sitzen,sentarse,sedere,s'asseoir,sedersi,seser,sit
+        fühlen,sentir,sentire,sentir,provare,sentir,feel
+        sich fühlen,sentirse,sentire,se sentir,sentirsi,sesentir,feel
+        leidtun,sentir pena,dolere,s'apitoyer,dispiacere,star mal,feel sorry
+        bedienen,servir,ministrare,servir,servire,survir,serve
+        bedeuten,significar,significare,signifier,voler(e) dire,muntar,mean
+        klingeln,sonar,tinnire,sonner,suonare,scalinar,ring
+        träumen,soñar,somniare,rêver,sognare,semiar,dreaming
+        steigen,subir,ascendere,monter,salire,ascender / ir si,rise
+        vorschlagen,sugerir,proponere,proposer,proporre,proponer,suggest
+        fürchten,temer,timere,avoir peur,temere,temer,fear
+        stattfinden,tener lugar,fieri,avoir lieu,avere luogo,haver liug,take place
+        müssen,tener que,debere,devoir,dovere,stuer,must
+        ziehen,tirar,trahere,tirer,tirare,trer,pull
+        nehmen,tomar,sumere,prendre,prendere,prender,take
+        arbeiten,trabajar,laborare,travailler,lavorare,luvrar,working
+        liegen,tumbarse,iacere,se coucher,sdraiarsi,scher,lie down
+        benutzen,utilizar,uti,utiliser,usare,utilisar / far diever,use
+        kommen,venir,venire,venir,venire,vegnir,come
+        schlagen,vencer,vincere,frapper,picchiare,pitgar / mislar,beat
+        sehen,ver,videre,voir,vedere,veser,see
+        sich anziehen,vestirse,vestire,s’habiller,vestirsi,sevestgir / setrer en,get dressed
+        reisen,viajar,iter facere,voyager,viaggiare,viagiar,travelling
+        aufpassen,vigilar,animum attendere,faire attention,fare attenzione,dar adatg,watch out
+        besuchen,visitar,visitare,visiter,andare a trovare,visitar,visit
+        leben,vivir,vivere,vivre,vivere,viver,live
+        fliegen,volar,volare,prendre l’avion,volare,sgular,flying
+        zurückkehren,volver,redire,revenir,tornare,returnar,return
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

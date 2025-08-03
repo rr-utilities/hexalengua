@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 5</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>In der Küche</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        das Mittagessen,el almuerzo,prandium,le déjeuner,il pranzo,il gentar,lunch
+        das Abendessen,la cena,cena,le dîner,la cena,la tscheina,dinner
+        das Frühstück,el desayuno,ientaculum,le petit déjeuner,la colazione,il solver,breakfast
+        das Messer,el cuchillo,culter,le couteau,il coltello,il cunti,knife
+        der Teller,el plato,catillus,l’assiette,il piatto,il taglier,plate
+        die Gabel,el tenedor,fuscinula,la fourchette,la forchetta,la savetscha,fork
+        der Hunger,el hambre,fames,la faim,la fame,la fom,hunger
+        das Essen,la comida,epulae,le repas,il pasto,il damagliar,meal
+        der Löffel,la cuchara,cochlear,la cuillère,il cucchiaio,il tschadun,spoon
+        das (Oliven)öl,el aceite (de oliva),oleum,l’huile (d’olive),l’olio (d’oliva) ,igl ieli (d’olivas),(olive) oil
+        das Schweinefleisch,el cerdo,suilla,la viande de porc,la carne di maiale,la carn piertg,pork
+        der Markt,el mercado,mercatus,le marché,il mercato,il marcau,market
+        das Brot,el pan,panis,le pain,il pane,il paun,bread
+        das Brötchen,el panecillo,panicellus,le petit pain,il panino,il paunin,roll
+        die Packung,el paquete,fasciculus,le paquet,il pacchetto,il pachetadi,packet
+        der Kuchen,el pastel,placenta,le gâteau,il dolce,la petta,cake
+        das Eis,el helado,(glacies),la glace,il gelato,il glatsch,ice cream
+        die Qualität,la calidad,qualitas,la qualité,la qualità,la qualitad,quality
+        das Fleisch,la carne,caro,la viande,la carne,la carn,meat
+        der Salat,la ensalada,acetaria,la salade,l’insalata,la salata,salad
+        das Obst,la fruta,poma,le fruit,la frutta,ils fretgs / la puma,fruit
+        die Milch,la leche,lac,le lait,il latte,il latg,milk
+        der Apfel,la manzana,malum,la pomme,la mela,il meil,apple
+        die Kartoffel,la patata,pomum terrestre,la pomme de terre,la patata,il truffel,potato
+        das Salz,la sal,sal,le sel,il sale,il sal,salt
+        die Wurst,la salchicha,lucanica,la saucisse,la salsiccia,la ligiongia,sausage
+        das Kalbfleisch,la ternera,caro vitulina,la viande de veau,la carne di vitello,la carn vadi,veal
+        die Sorte,la variedad,genus,la variété,il tipo,la sort,variety
+        das Gemüse,las verduras,olus,le légume,la verdura ,il legum,vegetables
+        das Wasser,el agua,aqua,l’eau,l’acqua,l’aua,water
+        das Sprudelwasser,el agua con gas,aqua spumomus,l’eau pétillante,l’acqua minerale gassata,l’aua cun borlas,sparkling water
+        das stille Wasser,el agua sin gas,aqua noncarbonata,l’eau plate,l’acqua minerale naturale,l’aua senza borlas,still water
+        der Kaffee,el café,coffea,le café,il caffè,il caffè,coffee
+        das Glas,el vaso,hyalus,le verre,il bicchiere,il migiel,glass
+        der Wein,el vino,vinum,le vin,il vino,il vin,wine
+        der Saft,el zumo,sucus,le jus de fruit,il succo,il suc,juice
+        der Fruchtsaft,el zumo de fruta,sucus pomorum,le jus de fruit,il succo di frutta,il suc da fretgs,fruit juice
+        der Orangensaft,el zumo de naranja,sucus aurantiorum,le jus d’orange,la spremuta,il suc d’oranschas,orange juice
+        das Getränk,la bebida,potus,la boisson,la bibita,la bubronda,drink
+        die Flasche,la botella,lagoena,la bouteille,la bottiglia,la butteglia,bottle
+        das Bier,la cerveza,cervisia,la bière,la birra,la gervosa / la biera,beer
+        der Durst,la sed,sitis,la soif,la sete,la seit,thirst
+        die Tasse,la taza,poculum,la tasse,la tazza,la scadiola,cup
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

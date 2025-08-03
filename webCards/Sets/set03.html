@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Der Körper</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        der Arm,el brazo,bracchium,le bras,il braccio,il bratsch,arm
+        der Hals,el cuello,collum,le cou,il collo,il culiez,neck
+        der Körper,el cuerpo,corpus,le corps,il corpo,il tgierp,body
+        der Finger,el dedo,digitus,le doigt,il dito,il det,finger
+        der Zahn,el diente,dens,la dent,il dente,il dent,tooth
+        der Bauch,el estómago,venter,le ventre,la pancia,il venter,stomach
+        das Ohr,el oído,auris,l’oreille,l’orecchio,l’ureglia,ear
+        das Auge,el ojo,oculus,l’œil,l’occhio,igl egl,eye
+        das Haar,el pelo,capillus,les cheveux,il capello,il cavegl / ils cavels,hair
+        der Fuss,el pie,pes,le pied,il piede,il pei,foot
+        der Bart,la barba,barba,la barbe,la barba,la barba,beard
+        der Mund,la boca,os,la bouche,la bocca,la bucca,mouth
+        der Kopf,la cabeza,caput,la tête,la testa,il tgau,head
+        das Gesicht,la cara,facies,le visage,il viso,la fatscha,face
+        der Rücken,la espalda,tergum,le dos,la schiena,il dies,back
+        die Hand,la mano,manus,la main,la mano,il maun,hand
+        die Nase,la nariz,nasus,le nez,il naso,il nas,nose
+        das Bein,la pierna,crus,la jambe,la gamba,la comba,leg
+        das Knie,la rodilla,genu,le genou,il ginocchio,il schanugl,knee
+        das Blut,la sangre,sanguis,le sang,il sangue,il saung,blood
+        das Gehör,el oír,auditus,l’ouïe,l’udito,l’udida,hearing
+        der Geruch,el olor,odor,l’odeur,l’odore,l’odur / il fried,odour
+        der Lärm,el ruido,strepitus,le bruit,il rumore,la rueida / la canera,noise
+        die Ruhe,el silencio,quies,le silence,la tranquillità,la quietezia,silence
+        das Geräusch,el sonido,strepitus,le bruit,il rumore,la ramur,sound
+        der Traum,el sueño,somnium,le rêve,il sogno,il siemi,dream
+        der Zahnarzt,el dentista,medicus dentarius,le dentiste,il dentista,il dentist,dentist
+        der Schmerz,el dolor,dolor,la douleur,il dolore,la dolur,pain
+        die Kopfschmerzen,el dolor de cabeza,dolor capitis,les maux de tête,il mal di testa,mal il tgau,headache
+        die Zahnschmerzen,el dolor de muelas,dolor dentium,le mal de dents,il mal di denti,mal ils dents,toothache
+        das Krankenhaus,el hospital,hospitale,l’hôpital,l’ospedale,il spital,hospital
+        der Arzt,el médico,medicus,le médecin,il medico,il miedi,doctor
+        die Ärztin,el médico,medica,le médecin,il medico,la miedia,doctor
+        die Gefahr,el peligro,periculum,le danger,il pericolo,il prighel,danger
+        die Erkältung,el resfriado,perfrictio,le rhume,il raffreddore,il cunauras,common cold
+        die Allergie,la alergia,allergia,l’allergie,l’allergia,l’allergia,allergy
+        die Hilfe,la ayuda,auxilium,l’aide,l’aiuto,igl agid,help
+        die Krankheit,la enfermedad,morbus,la maladie,la malattia,la malsogna,disease
+        der Krankenpfleger,la enfermera,aegrorum minister,l’infirmier,l’infermiere,il tgirunz,nurse
+        die Krankenschwester,la enfermera,aegrorum ministra,l’infirmière,l’infermiera,la tgirunza,nurse
+        die Apotheke,la farmacia,taberna medicamentorum,la pharmacie,la farmacia,l’apoteca,pharmacy
+        die Grippe,la gripe,influentia,la grippe,l’influenza,la grippa,flu
+        die Medizin,la medicina,medicina,le médicament,la medicina,la medischina,medicine
+        der Behinderte,la persona discapacitada,debilis,le handicapé,il disabile,igl impediu,disabled person
+        die Behinderte,la persona discapacitada,debilis,la personne handicapée,la disabile,l’impedida,disabled person
+        die Pille,la píldora,pastillus / pilula,la pilule,la pillola,la pella,pill
+        die Gesundheit,la salud,salus,la santé,la salute,la sanadad,health
+        der Erwachsene,el adulto,adultus,l’adulte,l’adulto,il carschiu,adult
+        der alte Mann,el anciano,senex,le vieil homme,il vecchietto,igl um vegl,old man
+        der Mann,el hombre,vir,l’homme,l’uomo,igl um,man
+        das Kind,el niño,infans,l’enfant,il bambino,igl affon,child
+        die Geburt,el nacimiento,nascentia,la naissance,la nascita,la naschientscha,birth
+        der Mensch,el ser humano,homo,l’être homme,l’essere persona,il carstgaun,human being
+        die alte Frau,la anciana,anus,la vieille femme,la vecchietta,la dunna veglia,old woman
+        das Leben,la vida,vita,la vie,la vita,la veta,life
+        ein Junge,un niño,puer,un garçon,un bambino,il buob / il mat,boy
+        die Frau,una mujer,femina,la femme,la donna,la dunna,woman
+        ein Mädchen,una niña,puella,une fille,una bambina,la buoba / la mattatscha,girl
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 11</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Navigation</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        die Richtung,la dirección,directio,la direction,la direzione,la direcziun,direction
+        der Eingang,la entrada,introitus,l’entrée,l’ingresso,l’entrada,entrance
+        der Ausgang,la salida,exitus,la sortie,l’uscita,l’extrada,exit
+        die Lage,el lugar,situs,l’emplacement,la posizione,la posiziun,location
+        der Ort,el lugar,locus,le lieu,il posto,il liug,place
+        in der Nähe,en la vecindad,propinquus / vicinus,à proximité,vicino,en vischinonza,in the neighbourhood
+        der Norden,el norte,septentriones,le nord,il nord,il nord,north
+        der Osten,el este,oriens,l’est,l’est,igl ost,east
+        der Süden,el sur,meridies,le sud,il sud,il sid,south
+        der Westen,el oeste,occidens,l’ouest,l’ovest,il vest,west
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

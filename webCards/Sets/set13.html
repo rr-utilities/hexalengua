@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 13</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Bildung und Beruf</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        der Schüler / die Schülerin,el alumno / la alumna,discipulus / discipula,l’élève,l’allievo / l’allieva,il scolar / la scolara,pupil
+        der (Schul)kamerad / die (Schul)kameradin,el compañero / la compañera,condiscipulus / condiscipula,le camarade / la camarade (d’école),il compagno / la compagna (di scuola),il cumpogn / la cumpogna (da scola),(school)mate
+        der Student / die Studentin,el estudiante,studens,l’étudiant / l’étudiante,lo studente / la studentessa,il student / la studenta,student
+        der Lehrer / die Lehrerin,el profesor / la profesora,magister,l’enseignant / l’enseignante,l’insegnante,il scolast / la scolasta,teacher
+        das (Unterrichts)fach,la asignatura,disciplina,la matière (enseignée),la materia,il rom,subject
+        die Aufmerksamkeit,la atención,(animi) attentio,l’attention,l’attenzione,l’attenziun,attention
+        die Klasse,la clase,classis,la classe,la classe,la classa,class
+        die Schule,la escuela,schola,l’école,la scuola,la scola,school
+        das Gymnasium,la gramática,gymnasium,le gymnase,il liceo,il gimnasi,high school
+        die (Unterrichst)stunde,la lección,schola,la leçon,la lezione,la lecziun,lesson
+        der Buchstabe,la letra,littera,la lettre,la lettera,il bustab,letter
+        die Matura,la Matura,maturitas,la maturité,la maturità,la matura,A-levels
+        die Universität,la universidad,universitas studiorum,l’université,l’università,l’universitad,university
+        die Hausaufgaben,los deberes,pensa (domestica),les devoirs,i compiti,ils pensums,homework
+        die Bank,el banco,subsellium,la banque,la banca,la banca,bank
+        der Leiter / die Leiterin,el gerente / la gerente,princeps,le chef / la cheffe,il direttore / la direttrice,il directur,manager / manageress
+        der Chef / die Chefin,el jefe / la jefa,praefectus / -a,le chef / la patronne,il capo / la direttrice,il capo / il menader,boss
+        der Erfolg,el éxito,successus,le succès,il successo,il success,success
+        die Firma,la empresa,firma,l’entreprise,la ditta,la firma,company
+        das Büro,la oficina,officium scriptorium,le bureau,l’ufficio,il biro,office
+        der Beruf,la profesión,professio,le métier,la professione,la professiun,profession
+        das Gehalt,el salario,salarium,le salaire,lo stipendio,la paga,salary
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

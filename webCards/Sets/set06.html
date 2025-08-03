@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 6</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Im Badezimmer</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        das Wasser,el agua,aqua,l’eau,l’acqua,l’aua,water
+        das Bad,el baño,lavatio,la salle de bain,il bagno,il bogn,bathroom
+        die Zahnbürste,el cepillo de dientes,peniculus dentarius,la brosse à dents,lo spazzolino,il barschun da dents,toothbrush
+        das Badezimmer,el cuarto de baño,balneum,la salle de bains,il bagno,il bogn,bathroom
+        der Spiegel,el espejo,speculum,le miroir,lo specchio,il spieghel,mirror
+        die Seife,el jabón,sapo,le savon,il sapone,il savun,soap
+        der Kamm,el peine,pecten,le peigne,il pettine,il petgen,comb
+        die Toilette,el aseo,latrina,les toilettes,il bagno,la tualetta,toilet
+        die Dusche,la ducha,mammatum,la douche,la doccia,la duscha,shower
+        die Zahnpasta,la pasta de dientes,pasta dentaria,le dentifrice,il dentifricio,la pasta da dents,toothpaste
+        das Handtuch,la toalla,mantele,la serviette,l’asciugamano,il schigentamauns,towel
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

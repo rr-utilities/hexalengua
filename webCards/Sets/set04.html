@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 4</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Zuhause</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        die Unterkunft,el alojamiento,hospitium,le logement,l’alloggio,igl albiert,accommodation
+        die Miete,el alquiler,conductum,la location,l’affitto,il fit / il tscheins,rent
+        der Kleiderschrank,el armario,armarium,l’armoire,l’armadio ,la scaffa da resti,wardrobe
+        der Aufzug,el ascensor,anabathrum,l’ascenseur,l’ascensore,igl ascensur,lift
+        die Bank,el banco,sedes,le banc,la panchina,il baun,bench
+        das Bild,el cuadro,imago,le tableau,il quadro,il maletg,picture
+        der Wecker,el despertador,horologium excitatorium,le réveil,la sveglia,il svegliarin,alarm clock
+        das Schlafzimmer,el dormitorio,cubiculum,la chambre à coucher,la camera da letto,la combra,bedroom
+        der Kühlschrank,el frigorífico,frigidarium,le réfrigérateur,il frigorifero,la frastgera,fridge
+        die Tapete,el papel pintado,tapetum,le papier peint,la tappezzeria,la tapeta,wallpaper
+        die Wohnung,el piso,habitatio,l’appartement,l’appartamento,la habitaziun,flat
+        das Wohnzimmer,el salón,cubiculum,le salon,il soggiorno,la stiva,living room
+        das Sofa,el sofá,sponda,le canapé,il divano,il sofa,sofa
+        das Stockwerk,el suelo,tabulatum,l’étage,il piano,l’alzada,floor
+        das Dach,el techo,tectum,le toit,il tetto,il tetg,roof
+        zu Hause,en casa,domi,à la maison,a casa,a casa,at home
+        die (Foto)kamera,la (foto)cámara,machina photographica,la caméra (photo),la macchina fotografica,la camera,(photo)camera
+        der Teppich,la alfombra,tapetum,le tapis,il tappeto,il teppi,carpet
+        der Abfall,la basura,purgamentum,les déchets,i rifiuti,il rumien,rubbish
+        die Tüte,la bolsa,cucullus,le sac,la busta,il scarnuz,bag
+        der Sack,la bolsa,saccus,le sac,la borsa,il sac,bag
+        das Bett,la cama,lectus,le lit,il letto,il letg,bed
+        das Haus,la casa,domus,la maison,la casa,la casa,house
+        die Küche,la cocina,culina,la cuisine,la cucina,la cuschina,kitchen
+        der Strom,la electricidad,vis electrica,l’électricité,la corrente,il current (electric),electricity
+        die Treppe,la escalera,scalae,l’escalier,la scala,la scala,stairs
+        das Regal,la estantería,loculamentum,l’étagère,lo scaffale,la cruna,shelf
+        das Zimmer,la habitación,camera,la chambre,la camera,la stanza,room
+        die Lampe,la lámpara,lucerna,la lampe,la lampada,la calozza,lamp
+        der Schlüssel,la llave,clavis,la clé,la chiave,la clav,key
+        das Licht,la luz,lux,la lumière,la luce,la glisch,light
+        die Maschine,la máquina,machina,la machine,la macchina,la maschina,machine
+        der Tisch,la mesa,mensa,la table,il tavolo,la meisa,table
+        die Wand,la pared,paries,le mur,la parete,la preit,wall
+        die Tür,la puerta,porta,la porte,la porta,igl esch,door
+        der Stuhl,la silla,sedes / sella,la chaise,la seggiola,la sutga,chair
+        der Rollstuhl,la silla de ruedas,sella rotalis,le fauteuil roulant,la sedia a rotelle,la scala rullonta,wheelchair
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

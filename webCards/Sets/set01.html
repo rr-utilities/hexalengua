@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Set 1</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+  <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+  <h1>Soziales Umfeld</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+  const csvData = `
+    de,es,la,fr,it,rm,en
+    die Adresse,la dirección,domicilium,l’adresse,l’indirizzo,l’adressa,address
+    der Geburtstag,la fecha de nacimiento,dies natalis,la date de naissance,il compleanno,il natalezi,birthday
+    der Vorname,el nombre,praenomen,le prénom,il nome,il num,(first) name
+    das Alter,la edad,aetas,l’âge,l’età,la vegliadetgna,age
+    die Familie,la familia,familia,la famille,la famiglia,la famiglia,family
+    die Mutter,la madre,mater,la mère,la madre,la mumma,mother
+    der Vater,el padre,pater,le père,il padre,il bab,father
+    die Eltern,los padres,(patres,) parentes,les parents,i genitori,ils geniturs,parents
+    das Baby,el bebé,infans,le bébé,il bebè,il pop,baby
+    der Sohn,el hijo,filius,le fils,il figlio,il fegl,son
+    die Tochter,la hija,filia,la fille,la figlia,la feglia,daughter
+    die Schwester,la hermana,soror (germana),la sœur,la sorella,la sora,sister
+    der Bruder,el hermano,frater (germanus),le frère,il fratello,il frar,brother
+    die Grosseltern,los abuelos,avi,les grands-parents,i nonni,Il tat e la tatta,grandparents
+    die Grossmutter,la abuela,avia,la grand-mère,la nonna,la tatta,grandmother
+    der Grossvater,el abuelo,avus,le grand-père,il nonno,il tat,grandfather
+    der Enkel,el nieto,nepos,le petit-fils,il nipote,il biadi,grandson
+    die Enkelin,la nieta,neptis,la petite-fille,la nipote,la biadia,granddaughter
+    die Tante,la tía,amita / matertera,la tante,la zia,l’onda,aunt
+    der Onkel,el tío,avunculus,l’oncle,lo zio,igl aug,uncle
+    der Cousin,el primo,consobrinus,le cousin,il cugino,il cusrin,cousin
+    die Cousine,la prima,consobrina,la cousine,la cugina,la cusrina,cousin
+    die Hochzeit,la boda,nuptiae,le mariage,il matrimonio,la nozza,wedding
+    die Ehefrau,la esposa,sponsa,l’épouse,la moglie,la dunna,wife
+    der Ehemann,el marido,maritus,le mari,il marito,igl um,husband
+    der Freund,el amigo,amicus,l’ami,l’amico,igl amitg,friend
+    der Herr,el caballero,dominus,le monsieur,il signore,il signur,gentleman
+    die Gruppe,el grupo,grex,le groupe,il gruppo,la gruppa,group
+    die Freundschaft,la amistad,amicitia,l’amitié,l’amicizia,l’amicezia,friendship
+    die Frau,la mujer,mulier,la femme,la signora,la signura,woman
+    die Freundin,la novia,amica,l’amie,l’amica,l’amitga,girlfriend
+    das Paar,la pareja,par,le couple,la coppia,il pèr d’amur,couple
+    Gestatten Sie?,¿Le importa?,Licetne?,Vous permettez ?,Permette?,Eis ei lubiu?,Do you mind?
+    höflich,cortésmente,humaniter / comiter,poliment,gentilmente,hofli,politely
+    Gern geschehen!,De nada.,Libenter!,De rien !,Non c’è di che!,Anzi! / Da nuot!,You’re welcome!
+    unhöflich,descortés,inhumanus,impoli,scortese,malhofli,impolite
+    entschuldigen,disculparse,excusare,s’excuser,chiedere scusa,seperstgisar,apologise
+    danke,gracias,gratias ago,merci,grazie,grazia / engraziel,thank you
+    sich bedanken,agradecer,gratias agere,remercier,ringraziare,engraziar,thank you
+    die Schuld,la culpa,culpa,la faute,la colpa,la cuolpa,guilt
+    erlauben,permitir,permittere,permettre,permettere,lubir,allow
+    bitte,por favor,quaeso,s’il te plaît,per favore,per plascher,please
+    ich möchte lieber…,Preferiría…,Malim…,je préfère…,preferisco…,jeu preferess…,I would rather…
+    leidtun,sentir pena por,dolere,s’excuser,dispiacersi,deplorar,regret
+    der Fremde,el extranjero,extraneus,l’étranger,l’estraneo,il jester,stranger
+    der Gast,el invitado,hospes,l’invité,l’ospite,il hosp,guest
+    der Treffpunkt,el lugar de encuentro,conventiculum,le lieu de rencontre,il punto d’incontro,il liug da scuntrada,meeting place
+    der Besucher,el visitante,visitator,le visiteur,il visitatore,il visitader,visitor
+    die Fremde,la extranjera,extranea,l’étranger,l’estranea,la jastra,stranger
+    die Einladung,la invitación,invitatio,l’invitation,l’invito,l’invitaziun,invitation
+    der Besuch,la visita,visitatio,la visite,la visita,la viseta,visit
+    Gute Reise!,¡Buen viaje!,Bonum iter!,Bon voyage !,Buon viaggio!,Bien viadi!,Have a good journey!
+    Guten Abend!,¡Buenas noches!,Salve!,Bonne soirée !,Buona sera!,Buna sera!,Good evening!
+    Guten Morgen!,¡Buenos días!,Salve!,Bonne journée !,Buon giorno!,Bien di!,Good morning!
+    Guten Tag!,¡Buenos días!,Salve!,Bonne journée !,Buon giorno!,Buna sera!,Good day!
+    Mach’s gut!,¡Cuídate!,Vale!,Prends soin de toi !,Stammi bene!,Stai bein!,Take care!
+    Tschüss!,¡Hasta la vista!,Vale!,Au revoir !,Ciao!,Ciao!,Goodbye!
+    Bis später!,¡Hasta luego!,Usque ad posteriorem tempus!,À plus tard !,A più tardi!,Tochen suenter!,See you later!
+    Bis morgen!,¡Hasta mañana!,Usque ad posteriorem diem!,À demain !,A domani!,Tochen damaun!,See you tomorrow!
+    Bis bald!,¡Hasta pronto!,Usque ad propinquum tempus!,A bientôt !,Ci vediamo!,Tochen (a) gleiti!,See you soon!
+    Hallo!,¡Hola!,Salve!,Bonjour !,Ciao! / Salve!,Ciao! / Hallo!,Hello!
+    auf Wiedersehen,adiós,vale,au revoir,arrivederci,Adia / Sin seveser,goodbye
+    die Umarmung,el abrazo,complexus,l’étreinte,l’abbraccio,la strocla,hug
+    der Kuss,el beso,osculum,le baiser,il bacio,la buna,kiss
+    der Gruss,el saludo,salutatio,le salut,il saluto,il salid,greeting
+    der Rat,el consejo,consilium,le conseil,il consiglio,il cussegl,advice
+    das Gegenteil,el contrario,contrarium,le contraire,il contrario,il cuntrari,opposite
+    das Problem,el problema,quaestio,le problème,il problema,il problem,problem
+    der Mut,el valor,animus,le courage,il coraggio,la curascha,courage
+    der Unterschied,la diferencia,differentia,la différence,la differenza,la differenza,difference
+    die Idee,la idea,cogitatio subita,l’idée,l’idea,l’idea,idea
+    die Meinung,la opinión,opinio,l’opinion,l’opinione,il meini,opinion
+    die Gelegenheit,la oportunidad,opportunitas,l’opportunité,l’occasione,la caschun,opportunity
+    die Geduld,la paciencia,patientia,la patience,la pazienza,la pazienzia,patience
+    das Zeichen,la señal,signum,le signe,il segno,il segn,sign
+    der Vorteil,la ventaja,commodum,l’avantage,il vantaggio,igl avantatg,advantage
+    die Liebe,el amor,amor,l’amour,l’amore,l’amur,love
+    die Zuneigung,el afecto,benevolentia,l’affection,la simpatia,l’affecziun,affection
+    das Glück,la felicidad,felicitas,le bonheur,la fortuna,la fortuna,happiness
+    die Freude,la alegría,gaudium / alacritas,la joie,la gioia,la legria,joy
+    Viel Glück!,la buena suerte,Bene eveniat!,Beaucoup de bonheur !,Buona fortuna!,Bien cletg!,Good luck!
+    die Aufregung,la emoción,commotio,l’excitation,l’eccitazione,l’agitaziun,excitement
+    die Hoffnung,la esperanza,spes,l’espoir,la speranza,la speronza,hope
+    die Wut,la ira,ira,la colère,la collera,la ravgia / la gretta,anger
+    die Mühe,la molestia,molestia,la peine,la fatica,la breigia,trouble
+    das Lächeln,la sonrisa,risus,le sourire,il sorriso,il surrir,smile
+    die Überraschung,la sorpresa,inopinatum / res improvisa,la surprise,la sorpresa,la surpresa,surprise
+    die Scham,la vergüenza,pudor,la honte,la vergogna,la tuorp / il turpetg,shame
+    das Pech,la mala suerte,infelicitas,la malchance,la sfortuna,il discletg,bad luck
+    die Angst,el temor,timor,la peur,la paura,la tema,fear
+    Abgemacht!,¡Es un trato!,-,Marché conclu !,D’accordo!,D’accord!,It’s a deal!
+    Geht in Ordnung!,¡Está bien!,-,C’est bon !,A posto!,Quei ei en uorden!,That’s all right!
+    Genau!,¡Exacto!,Sic est!,C’est ça !,Preciso.,Exact!,Exactly!
+    Interessant!,¡Interesante!,-,Intéressant !,Interessante!,Interessant!,Interesting!
+    Entschuldigung!,¡Lo siento!,-,Je suis désolé/e !,Scusi!,Perstgisa!,Sorry!
+    Wirklich?,¿De verdad?,Itane?,Vraiment ?,Davvero?,Propi? / Veramein?,Really?
+    Ich verstehe.,Comprendo.,Intellego.,Je comprends.,Capisco.,Jeu capeschel.,I understand.
+    Sehr gern!,De nada.,-,Avec plaisir !,Con piacere!,Fetg bugen!,You’re very welcome!
+    der Zweck,el propósito,finis,le but,lo scopo,il scopo / igl intent,purpose
+    die Unterhaltung,el entretenimiento,oblectatio,le divertissement,il divertimento,il discuors,entertainment
+    der Witz,la broma,iocus,la blague,la barzelletta,la sgnocca,joke
+    die Sache,la cosa,res,la chose,la cosa,la caussa,thing
+    die Lüge,la mentira,mendacium,le mensonge,la bugia,la manzegna,lie
+    das Wort,la palabra,verbum,le mot,la parola,il plaid,word
+    die Frage,la pregunta,questio,la question,la domanda,la damonda,question
+    die Antwort,la respuesta,responsio,la réponse,la risposta,la risposta,answer
+    der Vorschlag,la sugerencia,consilium,la proposition,la proposta,la proposta,suggestion
+    Kein Problem.,No hay problema.,Nihil obstat.,Il n’y a pas de problème.,Non c’è problema.,Negin problem.,No problem.
+    Es macht nichts.,No importa.,Nihil est.,Ce n’est pas grave.,Non fa niente.,(Quei) fa nuot.,It doesn’t matter.
+  `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

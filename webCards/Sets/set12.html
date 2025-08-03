@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 12</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Kalender</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        die Viertelstunde,el cuarto de hora,quarta pars horae,le quart d’heure,il quarto d’ora,il quart d’ura,quarter of an hour
+        die Minute,el minuto,sexagesima pars horae,la minute,il minuto,la minuta,minute
+        die Uhr,el reloj,horologium,la montre,l’orologio,l’ura,clock
+        die Sekunde,el segundo,minima pars horae,la seconde,il secondo,la secunda,second
+        die Stunde,la hora,hora,l’heure,l’ora,l’ura,hour
+        die halbe Stunde,media hora,semihora,la demi-heure,la mezz’ora,la mesa ura,half an hour
+        Es ist Viertel nach X.,Son las X y cuarto.,Hora X et quadrans est.,Il est X heures et quart.,Sono le X e un quarto.,Igl ei in quart vargau las X.,It’s a quarter past X.
+        Es ist halb X.,Son las X y media.,Hora X et dimidia est.,Il est X heures et demie.,Sono le X e mezza.,Ei ei mesa las X.,It’s half past X.
+        Es ist Viertel vor X.,Son las X menos cuarto.,Hora X-1 et dodrans est.,Il est X heures moins le quart.,Sono le X meno un quarto.,Igl ei in quart avon las X.,It’s a quarter to X.
+        Es ist Punkt X.,Son las X en punto.,Hora X est.,Il est X heures pile.,Sono le X in punto.,Ei ei las X.,It’s X o’clock.
+        Es ist fünf vor X.,Son las X menos cinco.,Quinque minutae ante horam X sunt.,Il est X heures moins cinq.,Sono le X meno cinque.,Igl ei tschun avon las X.,It’s five to X.
+        Es ist fünf nach X.,Son las X y cinco.,Hora X et quinque minutae sunt.,Il est X heures cinq.,Sono le X e cinque.,Igl ei tschun vargau las X.,It’s five past X.
+        der Moment,el momento,momentum (temporis),le moment,il momento,il mument,moment
+        der Mittag,el mediodía,meridies,le midi,il mezzogiorno,il miezdi,noon
+        der Morgen / der Vormittag,la mañana,mane,la matinée,la mattina,la damaun,morning
+        die Mitternacht,la medianoche,media nox,le minuit,la mezzanotte,la mesanotg,midnight
+        die Nacht,la noche,nox,la nuit,la notte,la notg,night
+        der Nachmittag,la tarde,tempus postmeridianum,l’après-midi,il pomeriggio,il suentermiezdi,afternoon
+        der Abend,la tarde,vesper,le soir,la sera,la sera,evening
+        morgens,por la mañana,mane,le matin,di mattina / la mattina,la damaun,in the morning
+        nachts,por la noche,noctu,la nuit,di notte / la notte,la notg,at night
+        nachmittags,por la tarde,post meridiem,l’après-midi,di pomeriggio / il pomeriggio,il suentermiezdi,in the afternoon
+        der Tag,el día,dies,le jour,la giornata,il di,day
+        der Wochentag,el día de la semana,dies profestus,le jour de la semaine,il giorno (della settimana),il di dalla jamna,day of week
+        die Woche,la semana,septimana,la semaine,la settimana,la jamna,week
+        der Montag,lunes,dies lunae,le lundi,il lunedì,il gliendiesdis,monday
+        der Dienstag,martes,dies Martis,le mardi,il martedì,il mardis,tuesday
+        der Mittwoch,miércoles,dies Mercurii,le mercredi,il mercoledì,la mesjamna,wednesday
+        der Donnerstag,jueves,dies lovis,le jeudi,il giovedì,la gievgia,thursday
+        der Freitag,viernes,dies Veneris,le vendredi,il venerdì,il venderdis,friday
+        der Samstag,sábado,dies Saturni,le samedi,il sabato,la sonda,saturday
+        der Sonntag,domingo,dies Solis / dominicus,le dimanche,la domenica,la dumengia,sunday
+        das Wochenende,el fin de semana,septimana vergens,le week-end,il fine settimana,la fin d’jamna,weekend
+        der Monat,el mes,mensis,le mois,il mese,il meins,month
+        der Januar,enero,Ianuarius,le janvier,gennaio,il schaner,January
+        der Februar,febrero,Februarius,le février,febbraio,il fever,February
+        der März,marzo,Martius,le mars,marzo,il mars,March
+        der April,abril,Aprilis,l’avril,aprile,igl avrel,April
+        der Mai,mayo,Maius,le mai,maggio,il matg,May
+        der Juni,junio,Iunius,le juin,giugno,il zercladur,June
+        der Juli,julio,Iulius,le juillet,luglio,il fenadur,July
+        der August,agosto,Augustus,l’août,agosto,igl uost,August
+        der September,septiembre,September,le septembre,settembre,il settember,September
+        der Oktober,octubre,October,l’octobre,ottobre,igl october,October
+        der November,noviembre,November,le novembre,novembre,il november,November
+        der Dezember,diciembre,December,le décembre,dicembre,il december,December
+        das Jahr,el año,annus,l’année,l’anno,igl onn,year
+        die Jahreszeit,la estación,tempus anni,la saison,la stagione,la stagiun,season
+        der Frühling,la primavera,ver,le printemps,la primavera,la primavera,spring
+        der Sommer,el verano,aestas,l’été,l’estate,la stad,summer
+        der Herbst,el otoño,autumnus,l’automne,l’autunno,igl atun,autumn
+        der Winter,el invierno,hiems,l’hiver,l’inverno,igl unviern,winter
+        das Silvester,la Nochevieja,Silvester,le nouvel an,il Capodanno,il Silvester,New Year’s Eve
+        die Kirche,la iglesia,ecclesia,l’église,la chiesa,la baselgia,church
+        der Gott / die Göttin,el dios / la diosa,deus / dea,le dieu / la déesse,il dio / la dea,il Diu,god / goddess
+        das Fest / die Party,el festival / la fiesta,festum,la fête / la célébration,la festa,la fiasta,festival / party
+        der Feiertag,la fiesta,dies festus,le jour de fête,il giorno festivo,il firau,holiday
+        Weihnachten,Navidad,festum natalicium Domini,Noël,il Natale,Nadal,Christmas
+        Ostern,Semana Santa,pascha,Pâques,La Pasqua,Pastgas,Easter
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

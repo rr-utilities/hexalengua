@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 15</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Verkehrsmittel und Ferien</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        der Bahnsteig,el andén,platea viae ferratae,le quai de la gare,il marciapiede,il perrun,platform
+        der Bus,el autobús,currus communis,le bus,l’autobus,il bus,bus
+        die Fahrkarte,el billete,tessera itineraria,le billet,il biglietto,il bigliet,ticket
+        die U-Bahn,el metro,ferrivia subterranea,le métro,la metropolitana,la metro,underground
+        die Strassenbahn,el tranvía,ferrivia strataria,le tramway,il tram,il tram,tram
+        der Zug,el tren,tramen,le train,il treno,il tren,train
+        die Rückfahrt,el viaje de vuelta,reditus,le retour,il ritorno,il retuorn,return journey
+        Hin und Zurück,ida y vuelta,utraque directio,aller et retour,l’andata e ritorno,ir e turnar,there and back
+        der Bahnhof,la estación de tren,statio ferriviaria,la gare,la stazione,la staziun,railway station
+        die Haltestelle,la parada,statio,l’arrêt,la fermata,la fermada,stop
+        Hinfahrt,el viaje de ida,(iter),l’aller simple,l’andata,il viadi sempel,one-way journey
+        das Motoröl,el aceite del motor,(oleum motorii),l’huile de moteur,l’olio (lubrificante),igl ieli,engine oil
+        der Parkplatz,el aparcamiento,locus stativus,le parking,il parcheggio,il parcadi,car park
+        das (Stadt)viertel,el barrio (de la ciudad),vicus,le quartier (de la ville),il quartiere,il quartier,(city) neighbourhood
+        der LKW,el camión,currus onerarius,le camion,il camion,il camiun,lorry
+        das (Stadt)zentrum,el centro (de la ciudad),centrum oppidi,le centre (urbain),il centro,il center,(city) centre
+        das Auto,el coche,autoraeda,la voiture,l’auto,igl auto,car
+        der Führerschein,el permiso de conducir,diploma gubernationis,le permis de conduire,la patente,la lubientscha dad ir cun auto,driving licence
+        die Brücke,el puente,pons,le pont,il ponte,la punt,bridge
+        das Taxi,el taxi,taxiraeda,le taxi,il taxi,il taxi,taxi
+        der Bürgersteig,la acera,crepido viaria,le trottoir,il marciapiede,il passapei / il trottuar,pavement
+        die Autobahn,la autopista,strata autocinetica,l’autoroute,l’autostrada,l’autostrada,motorway
+        die Panne,la avería,damnum,la panne,il guasto,la panna,breakdown
+        das Velo,la bicicleta,birota,le vélo,la bicicletta,il velo,bicycle
+        die Strasse / der Weg,la carretera / el camino,via,la rue / le chemin,la strada,la via,road / path
+        die Stadt,la ciudad,urbs,la ville,la città,il marcau,city
+        die Ecke,la esquina,angulus,le coin,l’angolo,il cantun,corner
+        das Benzin,la gasolina,bencinum,l’essence,la benzina,il benzin,petrol
+        die Tankstelle,la gasolinera,statio bencinaria,la station-service,il distributore,il tancadi,petrol station
+        das Werkzeug,la herramienta,instrumentum,l’outil,l’utensile,igl uaffen,tool
+        das Motorrad,la moto,autobirota,la moto,la motocicletta,il moped,motorbike
+        der Platz,la plaza,forum,la place,la piazza,il plaz,square
+        die Abfahrt,la salida,exitus,le départ,la partenza,la partenza,exit
+        das Schild,la señal,insigne viale,le panneau,il cartello,la tabla,sign
+        die Ampel,los semáforos,semaphorum,le feu de signalisation,il semaforo,l’ampla,traffic lights
+        der Flughafen,el aeropuerto,aeroportus,l’aéroport,l’aeroporto,il port aviatic,airport
+        das Apartement,el piso,diaeta,l’appartement,l’appartamento,igl appartament,apartment
+        das Flugzeug,el avión,aeroplanum,l’avion,l’aereo,igl aviun,aeroplane
+        das Gepäck,el equipaje,sarcinae,les bagages,il bagaglio,la bagascha,luggage
+        die Fähre,el ferry,ponto,le ferry,il traghetto,la navetta,ferry
+        das Hotel,el hotel,deversorium,l’hôtel,l’albergo,il hotel,hotel
+        der Plan,el plan,consilium,le plan,il piano,il plan,plan
+        der Stadtplan,el mapa,descriptio oppidi,le plan de la ville,la pianta della città,il plan dil marcau,city map
+        der Tourist / die Touristin,el turista,viator,le touriste / la touriste,il turista / la turista,il turist / la turista,tourist
+        die Reise,el viaje,iter,le voyage,il viaggio,il viadi,journey
+        das Reisebüro,la agencia de viajes,grapheum periegeticum,l’agence de voyage,l’agenzia (di) viaggi,il biro da viadi(s),travel agency
+        das Ferienhaus,la casa de vacaciones,villa ferialis,la maison de vacances,la casa per le vacanze,la casa da vacanzas,holiday home
+        der Aufenthalt,la estancia,commoratio,le séjour,il soggiorno,la dimora,stay
+        das Zimmer,la habitación,conclave,la chambre,la camera,la combra,room
+        der Schlüssel,la llave,clavis,la clé,la chiave,la clav,key
+        die Ankunft,la llegada,adventus,l’arrivée,l’arrivo,l’arrivada,arrival
+        der Koffer,la maleta,riscus,la valise,la valigia,la valischa,suitcase
+        die Pension,la pensión,hospitium,la pension,la pensione,la pensiun,pension
+        die Rezeption,la recepción,receptio,la réception,la reception,la recepziun,reception
+        die Reservierung,la reserva,(reservatio),la réservation,la prenotazione,la reservaziun,reservation
+        der Abflug,la salida,avolatio,le départ,la partenza,la partenza,departure
+        die Ferien,las vacaciones,feriae,les vacances,le vacanze,las vacanzas,holiday
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

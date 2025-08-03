@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 17</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Schlüsselbegriffe (Strukturwörter)</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        übrig,sobrante,reliquus,le reste,rimanente,restont,left
+        oft,a menudo,saepe,souvent,spesso,savens,often
+        pünktlich,a tiempo,in tempore,à l’heure,puntuale,punctual,on time
+        manchmal,a veces,interdum,parfois,qualche volta,magari,sometimes
+        ausserdem,además,praeterea,en plus,in più,plinavon,moreover
+        jetzt,ahora,nunc,maintenant,adesso,uss(a),now
+        ab und zu,a veces,interdum,de temps en temps,di tanto in tanto,mintgaton,now and then
+        das Ende,al final,finis,la fin,la fine,la fin,end
+        beide,ambos,ambo / ae / o,les deux,entrambi / entrambe,omisdu(a)s,both
+        sowohl … als auch,ambos ... y,et … et,soit que … soit que,sia … sia,ton … sco,both ... and
+        vergangene Nacht,anoche,proxima nocte,la nuit dernière,ieri notte,la notg vargada,last night
+        vorgestern,anteayer,nudius tertius,avant-hier,l’altro ieri,stiarsas,day before yesterday
+        früher,anterior,prior,ancien,ex,pli baul,earlier
+        vor,antes de,ante,avant,prima di,avon,before
+        kaum,apenas,vix,à peine,appena,strusch,hardly
+        ungefähr,aproximadamente,fere,environ,circa,circa,approximately
+        also,así que,igitur,donc,cioè,pia,so
+        gestern,ayer,heri,hier,ieri,ier,yesterday
+        ziemlich,bastante,aliquantum,assez,abbastanza,dètg,quite
+        jedes Mal,cada vez,semper,chaque fois,ogni volta,mintga gada,every time
+        fast,casi,fere,presque,quasi,bunamein,almost
+        meistens,casi siempre,plerumque,la plupart du temps,di solito,per il solit,most of the time
+        gere,como,libenter,volontiers,volentieri,bugen,like
+        völlig / total,completamente / totalmente,omnino / totaliter,complètement / totalement,completamente,cumpletamein,completely / totally
+        ständig,constantemente,continuus,constamment,continuamente,permanentamein,constantly
+        gegen,contra,contra,vers,verso,encunter,against
+        wann,cuando,quando,quand,quando,cura,when
+        noch,todavía,adhuc,encore,ancora,aunc,again
+        plötzlich,de repente,repente,soudain,improvvisamente,tuttenina,suddenly
+        innerhalb,dentro de,intra,dans,entro,enteifer,whitin
+        leider,desafortunadamente,dolere,malheureusement,purtroppo,deplorablamein,unfortunately
+        ab,desde,a / ab,à partir de,a partire da,naven da,from
+        nachdem,después de,postquam,après,dopo,suenter che,after
+        täglich,diariamente,cottidie,tous les jours,ogni giorno,quotidian,daily
+        anders,diferente,aliter,différent,diverso,auter,different
+        während,durante / mientras,dum,pendant,durante / mentre,duront,during
+        eigentlich,en realidad,revera,en fait,in realtà,atgnamein,actually
+        dann,entonces,tunc,puis,poi,allura / lu,then
+        besonders,especialmente,specialis,surtout,soprattutto,specialmein,especially
+        endlich,finalmente,postremo,enfin,finalmente,finalmein,finally
+        bis,hasta,ad,jusqu’à,fino a,tochen,until
+        Bis bald!,hasta pronto,Vale!,À bientôt !,A presto!,Tochen (a) gleiti!,See you soon!
+        heute,hoy,hodie,aujourd’hui,oggi,oz,today
+        sogar,incluso,etiam,même,persino,schizun,even
+        sofort,inmediatamente,statim,tout de suite,subito,immediat,immediately
+        nie,jamás,numquam,jamais,mai,mai,never
+        je … desto besser,lo ... mejor,quo … eo melius,plus ... mieux c’est,più … meglio è,pli … e pli,the … the better
+        morgen,mañana,cras,demain,domani,damaun,tomorrow
+        mehr,más,plus,plus,più,pli,more
+        später,más tarde,postea,plus tard,dopo,suenter,later
+        inzwischen,mientras tanto,interim,entre-temps,nel frattempo,daferton,in the meantime
+        sehr,muy,valde,très,molto,fetg,very
+        natürlich,naturalmente,scilicet,naturellement,naturalmente,naturalmein,naturally
+        weder … noch,ni ... ni,neque … neque,ni ... ni,né … né,ni … ni,neither ... nor
+        entweder … oder,ni ... ni,aut ... aut,soit ... soit,o … o,u … ni,either ... or
+        nicht,no,nom,ne … pas,non,buc,not
+        nein,no,no,non,no,na,no
+        normalerweise,normalmente,ex consuetudine,normalement,normalmente,normalmein,normally
+        offenbar,obviamente,videtur,apparemment,evidentemente,evidentamein,obviously
+        hoffentlich,ojalá,sperare + ACI,espérons que …,speriamo che …,speronza,hopefully
+        wieder / noch einmal,otra vez / una vez más,iterum,à nouveau / encore une fois,ancora (una volta),puspei,again / once more
+        übermorgen,pasado mañana,perendie,après-demain,dopodomani,surdamaun / pusmaun,the day after tomorrow
+        vorübergehend,pasar,praeterire,passer,passare,interim,pass
+        zufällig,por casualidad,forte,par hasard,per caso,percass,by chance
+        übrigens,a propósito,ceterum,d’ailleurs,a proposito,dil reminent,by the way
+        sonst,por lo demás,ceterum,sinon,altrimenti,schiglioc,otherwise
+        zuerst,primero,primum,d’abord,prima,emprem,first
+        wahrscheinlich,probablemente,probabiliter,probablement,probabilmente,probablamein,probably
+        lieber,mejor,carus,mieux,meglio,pli bugen,dear
+        vielleicht,quizás,fortasse,peut-être,forse,forsa,perhaps
+        wirklich,realmente,vere,vraiment,veramente,propi / veramein,really
+        ja,sí,ita est,oui,sì,gie,yes
+        immer,siempre,semper,toujours,sempre,adina,always
+        nächste/r/s,siguiente,proximus / a / um,prochain,prossimo / -a,proxim / -a,next
+        trotzdem,sin embargo,tamen,quand même,ciononostante,tuttina,nevertheless
+        nur,sólo,solum,seulement,solo,mo,only
+        genug,suficiente,satis,assez,abbastanza,avunda,enough
+        auch,también,etiam,aussi,anche,era,also
+        so,tan,sic,ainsi,così,aschia,so
+        sobald,tan pronto como,ubi (primum),dès que,appena,aschigleiti che,as soon as
+        spät,tarde,sero,tard,tardi,tard,late
+        früh,temprano,mane,tôt,presto,gleiti,early
+        alles,todo,omnia,tout,tutto,tut,all
+        letzte/r/s,último/-a,ultimus / a / um,dernier/-ère,ultimo / -a,davos / -a,last
+        einmal,una vez,semel,une fois,una volta,ina gada,once
+        mehrere,varios,complures,plusieurs,diversi,plir(a)s,several
+        schon,ya,iam,déjà,già,gia,already
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

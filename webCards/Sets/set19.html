@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 19</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Schlüsselbegriffe (Adjektive)</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        offen,abierto,aperta,ouvert,aperto,aviert,open
+        langweilig,aburrido,taediosus,ennuyeux,noioso,lungurus,boring
+        gemütlich,acogedor,fovere,confortable,accogliente,cumadeivel,cosy
+        geeignet,adecuado,idoneus,approprié,adatto,adattau da,suitable
+        scharf,afilado,acuti,pointu,affilato,git / picant,sharp
+        angenehm,agradable,iucundus,agréable,piacevole,emperneivel,pleasant
+        fröhlich,alegre,hilaris,joyeux,allegro,legreivel,cheerful
+        hoch,alto,summus,haut,alto,ault,high
+        breit,ancho,lata,large,largo,lartg,wide
+        günstig,barato,vilis,bon marché,economico,bienmarcau,cheap
+        hübsch,bonito,satis,joli,carino,tschéc,pretty
+        betrunken,borracho,ebrius,ivre,ubriaco,stuorn,drunk
+        glänzend,brillante,micans,brillant,lucido,tarlischont,shiny
+        gut,bueno,bonum,bien,buono,bien,good
+        warm,caliente,calidum,chaud,caldo,cauld,warm
+        müde,cansado,defessus,fatigué,stanco,staunchel,tired
+        teuer,caro,sumptuosus,cher,caro,car,expensive
+        verheiratet,casado,nupta,marié(e),sposato,maridau,married
+        kurz,corto,breve,court,corto,cuort,short
+        quadratisch,cuadrado,quadratum,carrée,quadrato,quadratic,square
+        sorgfältig,cuidadoso,diligens,soigneusement,accuratamente,cunscienzius,careful
+        neugierig,curioso,curiosus,curieux,curioso,marviglius,curious
+        enttäuscht,decepcionado,spe deceptus,déçu,deluso,trumpau,disappointment
+        arbeitslos,desempleado,opere vacuus,au chômage,disoccupato,disoccupau,unemployed
+        verzweifelt,desesperado,desperatus,désespéré,disperato,desperau,despair
+        wach,despierto,exsomnis,éveillé,sveglio,allert,awake
+        verschieden,diferente,diversus,différent,diverso,divers,different
+        schwer,difícil,difficilis,difficile,difficile,grev,difficult
+        lustig,divertido,iocosus,drôle,divertente,legher,funny
+        geschieden,divorciado,divortio seiunctus,divorcé(e),divorziato,spartgiu,divorced
+        süss,dulce,dulcis,sucré,dolce,dultsch,sweet
+        hart,duro,durus,dur,duro,dir,hard
+        elektrisch,eléctrico,electricus,électrique,elettrico,electric,electric
+        schick,elegante,elegans,chic,elegante,elegant,smart
+        spannend,emocionante,mentemalliciens,passionnant,appassionante,interessant,exciting
+        beschäftigt,empleado,occupatus,employé(e),impegnato,occupau,employed
+        verliebt,en el amor,amore captus,amoureux,innamorato,inamurau,in love
+        krank,enfermo,aegrotus,malade,malato,malsaun,sick
+        besondere,especial,specialis,particulier,speciale,special,special
+        eng,estrecho,augustus,étroit,stretto,stretg,narrow
+        dumm,estúpido,stuitus,stupide,stupido,tup,stupid
+        genau,exactamente,exactus,exactement,preciso,exact,exactly
+        eigenartig / komisch,extraño / divertido,mirus / ridiculus,singulier / bizarre,strano,curios,strange / funny
+        leicht,fácil,facilis,facile,leggero,lev,easy
+        Lieblings-,favorito,gratissimus,préféré,preferito,preferiu,favourite
+        glücklich,feliz,felix,heureux,felice,ventireivel,happy
+        hässlich,feo,foedus,laid,brutto,tarladiu,ugly
+        dünn,fino,tenuis,mince,sottile,satel,thin
+        fest,firme,firmus,ferme,fisso,ferm / fix,firm
+        frisch,fresco,recens,frais,fresco,frestg,fresh
+        kalt,frío,frigidus,froid,freddo,freid,cold
+        gebraten,frito,assare,rôti,arrosto,barsau,fried
+        laut,fuerte,magnus,à haute voix,alto,dad ault,loud
+        gross,grande,magnus,grand,grande,grond,big
+        fett,graso,pinguis,gras,grasso,grass,fatty
+        frei,gratis,gratis,libre,libero,liber,free
+        dick,grueso,crassus,épais,grasso,grass,thick
+        schön,hermoso,pulcher,beau,bello,bi,beautiful
+        wichtig,importante,magnus,important,importante,impurtont,important
+        unmöglich,imposible,impossibile,impossible,impossibile,nunpusseivel,impossible
+        FALSCH,incorrecto,falsus,faux,sbagliato,falliu,wrong
+        unglaublich,increíble,incredibilis,incroyable,incredibile,incredibel,unbelievable
+        unglücklich,infeliz,infelix,malheureux,infelice,malcuntent,unhappy
+        intelligent,inteligente,prudens,intelligent,intelligente,intelligent,intelligent
+        jung,joven,iuvenis,jeune,giovane,giuven,young
+        zusammen,juntos,(una) cum,ensemble,insieme,ensemen,together
+        lang,largo,longus,long,lungo,liung,long
+        langsam,lento,tardus / lentus,lent,piano,plaun,slow
+        leicht,ligero,levis,facile,facile,lev,easy
+        sauber,limpio,lautus,propre,pulito,schuber,clean
+        fertig,listo,paratus,fini,finito,finiu,ready
+        voll,lleno,plenus,plein,pieno,plein,full
+        verrückt,loco,insanus,fou,matto,balurd,crazy
+        schlecht,malo,malus,mauvais,cattivo,schliet,bad
+        herrlich,maravilloso,splendidus,magnifique,magnifico,magnific,marvellous
+        meiste,más / la mayoría,maximum,la plupart / le plus,la maggior parte (di),la gronda part da,most
+        am besten,mejor,melior,le meilleur,la cosa migliore,il meglier,best
+        beste(r / s),mejor/-es,optimus,meilleur(e),migliore,il meglier,best(s)
+        weniger,menos,minus,moins,meno,meins,less
+        geringste/-a,menos/-a,deterrimus,le / la moins,minimo,il pauc,least
+        modern,moderno,novus,moderne,moderno,modern,modern
+        tot,muerto,mortuus,mort,morto,miert,dead
+        viel,mucho,multum,beaucoup,molto,bia,much
+        nötig,necesario,necessarius,nécessaire,necessario,necessari,necessary
+        adelig,noble,nobilis,noble,nobile,niebel,noble
+        neu,nuevo,novus,nouveau,nuovo,niev,new
+        besetzt,ocupado,occupatus,occupé,occupato,occupau,busy
+        stolz,orgulloso,superbus,fier,orgoglioso,losch,proud
+        gefährlich,peligroso,periculosus,dangereux,pericoloso,prigulus,dangerous
+        klein,pequeño,parvus,petit,piccolo,pign,small
+        faul,perezoso,piger,paresseux,pigro,marsch,lazy
+        persönlich,personal,personalis,personnel,personale,persunal,personally
+        schwer,pesado,gravis,difficile,pesante,grev,heavy
+        flach,plano,planus,plat,piatto,plat,flat
+        beliebt,popular,favorabilis,populaire,benvoluto,beinvesiu,popular
+        möglich,posible,possibilis,possible,possibile,pusseivel,possible
+        genau,preciso,accuratus,exact,preciso,exact,accurate
+        privat,privado,privatus,privé,privato,privat,private
+        tief,profundo,profundus,profond,profondo,profund,deep
+        verboten,prohibido,vetitus,interdit,proibito,scumandau,forbidden
+        öffentlich,público,publicus,public,pubblico,public,public
+        lieb,querido,carus,aimer,caro,car,dear
+        still,quieto,quietus,silencieux,silenzioso,da bass,silent
+        schnell,rápido,rapidus,rapide,velocemente,spert,quickly
+        echt,real,verus,vrai,vero,real,real
+        gerade,recto,rectus,droit,d(i)ritto,grad,straight
+        rund,redondo,rotundus,rond,rotondo,rodund,round
+        reserviert,reservado,reservatus,réserver,riservato,reservau,reserved
+        verantwortlich,responsable,responsalis,responsable,responsabile,responsabel,responsible
+        lecker,sabroso,delicatus,délicieux,buono,gustus,tasty
+        gesund,saludable,sanus,en bonne santé,salutare,saun,healthy
+        trocken,seco,siccus,sec,asciutto,schetg,dry
+        sicher,seguro,securus,sûr,sicuro,segir,safe
+        vernünftig,sensato,rationabile,raisonnable,ragionevole,raschuneivel,sensible
+        ernst,serio,gravis,sérieux,serio,serius,serious
+        ähnlich,similar,similis,similaire,simile,semegliont,similar
+        sympathisch,simpático,iucundus,sympathique,simpatico,simpatic,likeable
+        allein,solo,solus,seul,solo,persul,alone
+        weich,suave,mollis,doux,soffice,lom,soft
+        schmutzig,sucio,sordidus,sale,sporco,tschuf,dirty
+        schrecklich,terrible,terribilis,terrible,terribile,sgarscheivel,terrible
+        typisch,típico,typicus,typique,tipico,tipic,typical
+        ruhig,tranquilo,tranquillus,calme,tranquillamente,ruasseivel,quiet
+        traurig,triste,tristis,triste,triste,trest,sad
+        dringend,urgente,urgens,urgent,urgentemente,urgentamein,urgent
+        nützlich,útil,utilis,utile,utile,nizeivel,useful
+        leer,vacío,inanis,vide,vuoto,vit,empty
+        wahr,verdadero,verus,vrai,vero,ver,true
+        alt,viejo,vetus,vieux,vecchio,vegl,old
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

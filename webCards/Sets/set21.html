@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 21</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Schlüsselbegriffe (Präpositionen)</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        nach,a,in + Akk,après,dopo,suenter,to
+        bis,a,donec,jusqu'à,fino a,tochen,to
+        zu,a,ad,trop,troppo,memia,to
+        wegen,a causa de,propter,à cause de,a causa (di),perquei che,because of
+        rechts,a la derecha,dexter,à droite,a destra,dretg,right
+        links,a la izquierda,a sinistra (parte),à gauche,a sinistra,saniester,left
+        dort,allí,ibi,là,là,leu,there
+        vor,antes de,ante,avant,prima,avon,before
+        hier,aquí,hic,ici,qui / qua,cheu,here
+        oben,arriba,supra,en haut,sopra,sur,above
+        obwohl,aunque,quamvis,bien que,sebbene,schebein che,although
+        als,como,ut,comme,da,cura,as
+        gegen,contra,contra,contre,contro,encunter,against
+        ab,de,de,à partir de,a partire da,naven da,from
+        drinnen,dentro de,intus,à l’intérieur,dentro,endadens,inside
+        seit,desde,ex,depuis,da,dapi,since
+        hinten,detrás,post,derrière,dietro,davos,behind
+        zurück,detrás de,retro,en arrière,indietro,anavos,behind
+        auf,en,in,sur,su,sin,to
+        bei,con,apud,chez,da,tier,at
+        unter,en,sub,sous,sotto,sut,under
+        sobald,en cuanto,simulatque,dès que,appena,aschigleiti che,as soon as
+        statt,en vez de,loco,au lieu de,invece di,enstagl,instead of
+        überall,en todas partes,ubique,partout,dappertutto,dapertut,everywhere
+        zwischen,entre,inter,entre,tra,denter,between
+        ausser,excepto,nisi,sauf,eccetto,dano / excepiu,except
+        draussen,fuera,foris,à l’extérieur,fuori,ordado,outside
+        gegenüber,hacia,(erga),en face,di fronte,visavi,towards
+        bis,hasta,usque ad,jusqu’à,fino a,entochen,until
+        oder,o,aut,ou,o,ni,or
+        für,para,pro,pour,per,per,for
+        damit,para que,ut + Konj,pour que,affinché,sinaquei che,so that
+        aber / sondern,pero,sed,mais,ma,mo / denton,but
+        weil / denn,porque / por,quia / quod,parce que,perché,perquei che,because / for
+        dass,que,ut + Konj,que,che,che,that
+        wenn / ob,si / aunque,si,si,se,sche,if / whether
+        ohne,sin,sine,sans,senza,senza,without
+        geradeaus,todo recto,recta,tout droit,d(i)ritto,agradora,straight ahead
+        und,y,et,et,e,e / ed,and
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

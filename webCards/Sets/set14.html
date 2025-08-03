@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 14</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Digitalisierung</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        die Telefonnummer,el número de teléfono,numerus telephonicus,le numéro de téléphone,il numero di telefono,la numera da telefon,telephone number
+        der Computer,el ordenador,machina computatoria,l’ordinateur,il computer,il computer,computer
+        das Telefon,el teléfono,telephonum,le téléphone,il telefono,il telefon,phone
+        das Mobiltelefon,el teléfono móvil,telephonulum,le téléphone portable,il telefonino,il telefonin,mobile phone
+        das Internet,la red,interreticulum,l’internet,l’Internet,igl internet,Internet
+        die Folge,el episodio,series,l’épisode,la puntata,l’episoda,episode
+        die Zeitung,el periódico,diurnum,le journal,il giornale,la gasetta,newspaper
+        der Laptop,el portátil,machina computatoria portabilis,l’ordinateur portable,il portatile,il laptop,laptop
+        die Sendung,el programa,emissio,l’émission,la trasmissione,l’emissiun,programme
+        die Website,el sitio web,pagina interretialis,le site web,il sito (web),la pagina-web,website
+        der Film,la película,pellicula,le film,il film,il film,film
+        das Radio,la radio,radiophonum,la radio,la radio,il radio,radio
+        der Fernseher,la televisión,televisorium,la télévision,il televisore,la televisiun / la chista,television
+        die Nachrichten,las noticias,nuntii,les nouvelles,le notizie,las novas / novitads,news
+        `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

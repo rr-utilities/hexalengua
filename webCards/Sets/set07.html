@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 7</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Modewelt</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        der Mantel,el abrigo,pallium,le manteau,il cappotto,il manti,coat
+        die Garderobe,el armario,vestiarium,la garde-robe,il guardaroba,la gardaroba,wardrobe
+        die Socke,el calcetín,soccus,la chaussette,la calza,la socca,sock
+        der Stil,el estilo,genus,le style,lo stile,il stil,style
+        der Pullover,el jersey,strictoria lanea,le pull-over,il pullover,il pullover,jumper
+        der Anzug,el traje,vestis,le costume,l’abito,la mondura,suit
+        das Kleid,el vestido,vestis,la robe,il vestito,il vestgiu,dress
+        das Hemd,la camisa,tunica,la chemise,la camicia,la camischa,shirt
+        das T-Shirt,la camiseta,tunicula,le t-shirt,la maglietta,il t-shirt,T-shirt
+        die Jacke,la chaqueta,iacca,la veste,la giacca,la giacca,jacket
+        der Rock,la falda,gunna,la jupe,la gonna,la rassa,skirt
+        die Mode,la moda,ornatus / habitus,la mode,la moda,la moda,fashion
+        die Kleidung,la ropa,vestis,les vêtements,l’abbigliamento,la vestgadira,clothes
+        die Grösse,la talla,magnitudo,la taille,la taglia,la grondezia,size
+        die Hose,los pantalones,bracae,le pantalon,i pantaloni,las caultschas,trousers
+        die Jeans,los vaqueros,-,le jean,i jeans,las jeans,jeans
+        der Ring,el anillo,anulus,la bague,l’anello,igl ani,ring
+        die Tasche,el bolso,pera,la poche,la borsa,la tastga,bag
+        die Handtasche,el bolso,sacculus,le sac à main,la borsetta,la tastga (da maun),handbag
+        der Gürtel,el cinturón,balteus,la ceinture,la cintura,la tschenta,belt
+        der Schal,el pañuelo,pannus collaris,l’écharpe,la sciarpa,la schlingia,scarf
+        der Regenschirm,el paraguas,umbrella,le parapluie,l’ombrello,il parisol,umbrella
+        der Ohrring,el pendiente,inauris,la boucle d’oreille,l’orecchino,la rintga,earring
+        der Hut,el sombrero,petasus / pilleus,le chapeau,il cappello,il capi,hat
+        der Schuh,el zapato,calceus,la chaussure,la scarpa,il calzer,shoe
+        die Brille,las gafas,perspicillum,les lunettes,gli occhiali,ils egliers,glasses
+        die Sonnenbrille,las gafas de sol,perspicillum solare,les lunettes de soleil,gli occhiali da sole,ils egliers da sulegl,sunglasses
+        die Socken,los calcetines,socci,les chaussettes,i calzini,las soccas,socks
+        die Farbe,el color,color,la couleur,il colore,la colur,colour
+        gelb,amarillo,flavus,jaune,giallo,mellen,yellow
+        blau,azul,caeruleus,bleu,blu,blau,blue
+        dunkelblau,azul oscuro,caeruleus,bleu foncé,blu scuro,stgir-blau,dark blue
+        weiss,blanco,albus,blanc,bianco,alv,white
+        hell,claro,clarus,clair,chiaro,clar,light
+        bunt,colorido,varius,multicolore,colorato,gagl,colourful
+        grau,gris,canus,gris,grigio,grisch,grey
+        braun,marrón,fuscus,marron,marrone,brin,brown
+        lila,morado,violaceus,violet,lilla,lila,purple
+        orange,naranja,aurantius,orange,arancione,oransch,orange
+        schwarz,negro,niger,noir,nero,ner,black
+        dunkel,oscuro,obscurus,foncé,scuro,stgir,dark
+        rot,rojo,ruber,rouge,rosso,tgietschen,red
+        rosa,rosa,(roscus),rose,rosa,rosa,pink
+        grün,verde,viridis,vert,verde,verd,green
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 20</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Schlüsselbegriffe (Pronomen)</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        etwas,algo,aliquid,quelque chose,qualcosa,enzatgei,something
+        dort,allí,ibi,celui-là,quello / -a,leu,there
+        jede(r / s),cada,omnis,chaque,ogni,mintga / mintgin(a),every
+        wie,como,quomodo,comme,come,co,how
+        welche(r / s),cual,qui / quae / quod,quel,quale,il qual / la quala / che,which
+        woher,de donde,unde,d'où,da dove,danunder,from where
+        wo,donde,ubi,où,dove,nua,where
+        diese(r / s),este,hic / haec / hoc,ceci,questo,quei,this
+        nichts,nada,nihil,rien,niente,nuot,nothing
+        niemand,nadie,nemo,personne,nessuno,negin,nobody
+        kein,ninguno,nullus,aucun,nessuno,negin,no
+        selbst,mismo,ipse,même,stesso,mez / tez / sez,ourselves
+        andere(r / s),otro(s),alius,autre(s),altro / -a,auter / autra,other(s)
+        warum?,¿por qué?,cur?,pourquoi ?,perché?,daco? / pertgei?,why?
+        was?,¿qué?,quid?,ce qui ?,che cosa?,tgei?,what?
+        wer?,¿quién?,quis?,qui ?,chi?,tgi?,who?
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

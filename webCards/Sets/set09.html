@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 9</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Gesellschaft</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        das Recht,el derecho,ius,le droit,il diritto,il dretg,right
+        der Personalausweis,el documento de identidad,charta identitatis,la carte d’identité,la carta d’identità,la carta d’identitad,identity card
+        der Staat,el estado,res publica,l’État,lo stato,il stadi,state
+        die Regierung,el gobierno,imperium / regnum,le gouvernement,il governo,la regenza,government
+        die Steuer,el impuesto,tributum,l’impôt,l’imposta,la taglia,tax
+        die Welt,el mundo,mundus,le monde,il mondo,il mund,world
+        die Öffentlichkeit,el público,publicum,le public,il pubblico,la publicitad,public
+        die Anmeldung,el registro,professio,l’inscription,l’iscrizione,l’annunzia,registration
+        der Krieg,la guerra,bellum,la guerre,la guerra,l’uiara,war
+        die Auskunft,la información,informatio,le renseignement,l’informazione,l’informaziun,information
+        die Demonstration,la manifestación,demonstratio,la manifestation,la manifestazione,la demonstraziun,demonstration
+        die Polizei,la policía,custodes publici,la police,la polizia,la polizia,police
+        die Politik,la política,res publica,la politique,la politica,la politica,politics
+        die Auswahl,la selección,selectio,la sélection,la selezione,la schelta,selection
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 8</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Betriebe</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        der Bäcker,el panadero,pistor,le boulanger,il panettiere,il pasterner / il pec,baker
+        das Geschenk,el regalo,donum,le cadeau,il regalo,il schenghetg,gift
+        die Metzgerei,la carnicería,macellum,la boucherie,la macelleria,la mazlaria,butcher’s shop
+        die Drogerie,la farmacia,taberna aromataria,la droguerie,la drogheria,la drogaria,drugstore
+        die Bäckerei,la panadería,pistrina,la boulangerie,la panetteria,la pasternaria,bakery
+        der Laden,la tienda,taberna,le magasin,il negozio,la stizun,shop
+        der Appetit,el apetito,cibi cupiditas,l’appétit,l’appetito,igl appetit,appetite
+        das (Strassen)café,el café (de la calle),cafcum,le café (de rue),il bar,il caffé,(street) café
+        der Kellner,el camarero,puer (cauponius),le serveur,il cameriere,il camerier,waiter
+        das Restgeld,el dinero restante,(reliqua pecunia),le reste de l’argent,il resto,il rest,remaining money
+        das Menü,el menú,-,le menu,il menu,il menu,menu
+        das Lokal,el restaurante,taberna,l’établissement,il locale,il local,restaurant
+        das Restaurant,el restaurante,taberna,le restaurant,il ristorante,l’ustria,restaurant
+        die Kellnerin,la camarera,puella (cauponia),la serveuse,la cameriera,la camariera,waitress
+        die Rechnung,la cuenta,ratio,l’addition,il conto,il quen,bill
+        die Pizzeria,la pizzería,-,la pizzeria,la pizzeria,la pizzaria,pizzeria
+        das Trinkgeld,la propina,corollarium,le pourboire,la mancia,la bunamana,tip
+        die Kosten,el coste,sumptus,les frais,le spese,ils cuosts,cost
+        das Geld,el dinero,pecunia,l’argent,il denaro,ils daners,money
+        das Portemonnaie,el monedero,marsuppium,le porte-monnaie,il portamonete,la buorsa,wallet
+        der Preis,el precio,pretium,le prix,il prezzo,il prezi,price
+        die Kasse,la caja,arca,la caisse,la cassa,la cassa,till
+        die Gebühr,la cuota,sumptus,la taxe,la tassa,la taxa,fee
+        die Unterschrift,la firma,subscriptio,la signature,la firma,la suttascripziun,signature
+        die Münze,la moneda,nummus,la pièce de monnaie,la moneta,la muneida,coin
+        das Münzgeld,la moneda,nummi,la monnaie,gli spiccioli,muneida,coin
+        der Schein,la nota,charta argentaria,le billet,il biglietto,la bancnota,note
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

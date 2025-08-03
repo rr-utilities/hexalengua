@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 10</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Natur</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        der Wald,el bosque,silva,la forêt,il bosco,igl uaul,forest
+        das Feld,el campo,ager,le champ,il campo,il camp / il terren,field
+        der See,el lago,lacus,le lac,il lago,il lag,lake
+        das Dorf,el pueblo,vicus,le village,il villaggio,il vitg,village
+        der Fluss,el río,flumen,la rivière,il fiume,il flum,river
+        der Sand,la arena,(h)arena,le sable,la sabbia,il sablun,sand
+        der Bauernhof,la granja,fundus,la ferme,la fattoria,il bein puril,farm
+        der Berg,la montaña,mons,la montagne,la montagna,il cuolm / il péz,mountain
+        der Stein,la piedra,lapis,la pierre,la pietra,il crap,stone
+        das Tier,el animal,animal,l’animal,l’animale,igl animal,animal
+        der Baum,el árbol,arbor,l’arbre,l’albero,la plonta,tree
+        das Pferd,el caballo,equus,le cheval,il cavallo,il cavagl,horse
+        das Schwein,el cerdo,porcus,le cochon,il maiale,il piertg,pig
+        die Katze,el gato,cattus,le chat,il gatto,il gat,cat
+        der Vogel,el pájaro,avis,l’oiseau,l’uccello,igl utschi,bird
+        der Hund,el perro,canis,le chien,il cane,il tgaun,dog
+        der Fisch,el pez,piscis,le poisson,il pesce,il pèsch,fish
+        die Blume,la flor,flos,la fleur,il fiore,la flura,flower
+        die Kuh,la vaca,vitulus,la vache,la mucca,la vacca,cow
+        die Luft,el aire,aër,l’air,l’aria,l’aria,air
+        die Wärme,el calor,calor,la chaleur,il calore,la calira,warmth
+        der Himmel,el cielo,caelum,le ciel,il cielo,il tschiel,sky
+        die Sonne,el sol,sol,le soleil,il sole,il sulegl,sun
+        das Wetter,el tiempo,tempestas,le temps,il tempo,l’aura,weather
+        der Wind,el viento,ventus,le vent,il vento,il vent,wind
+        der Regen,la lluvia,pluvia,la pluie,la pioggia,la plievgia,rain
+        der Schnee,la nieve,nix,la neige,la neve,la niev,snow
+        die Wolke,la nube,nubes,le nuage,la nuvola,la nebla,cloud
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>

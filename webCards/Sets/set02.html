@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Set 2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="top-bar">
+    <button class="back-button" onclick="window.location.href='../index.html'">←</button>
+    <h1>Hobbys</h1>
+</div>
+
+<body>
+    <div class="card-container">
+        <div class="card" id="flashcard" tabindex="0">
+            <div class="card-face card-front" id="frontText"></div>
+            <div class="card-face card-back" id="backText"></div>
+        </div>
+    </div>
+
+    <div id="counter" style="text-align:center; margin-top:10px;font-weight: bold;"></div>
+    <br>
+
+    <div class="controls-row">
+        <button id="btnPrev">← Falsch</button>
+        <button id="btnFlip">Umdrehen</button>
+        <button id="btnNext">Richtig →</button>
+    </div>
+
+    <div class="controls-row" style="max-width: 300px;">
+        <button id="btnShuffle">Mischen</button>
+        <button id="btnUndo">Rückgängig</button>
+        <button id="btnReset">Zurücksetzen</button>
+    </div>
+
+    <div class="options-group">
+        <p><strong>Rückseite auf:</strong></p>
+        <div class="options" id="languageOptions"></div>
+    </div>
+
+    <h2>Vokabelliste</h2>
+    <div class="word-list">
+        <table>
+            <thead id="wordHead"></thead>
+            <tbody id="wordTable"></tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+    const csvData = `
+        de,es,la,fr,it,rm,en
+        der Schauspieler,el actor,actor,l’acteur,l’attore,igl actur,actor
+        der Tänzer,el bailarín,ludius,le danseur,il ballerino,il saltunz,dancer
+        die Tänzerin,la bailarina,ludia,la danseuse,la ballerina,la saltunza,dancer
+        das Ballett,el ballet,pantomimus,le ballet,il balletto,il ballet,ballet
+        die Eintrittskarte,el billete,tessera introitus,le billet d’entrée,il biglietto,il bigliet,ticket
+        der Sänger,el cantante,cantator,le chanteur,il cantante,il cantadur,singer
+        das Kino,el cine,theatrum cinematicum,le cinéma,il cinema,il kino / il cinema,cinema
+        das Konzert,el concierto,concentus musicus,le concert,il concerto,il concert,concert
+        der Spieler,el jugador,lusor,le joueur,il giocatore,il giugadur,player
+        die Spielerin,la jugadora,lustrix,la joueuse,la giocatrice,la giugadura,player
+        das Spielzeug,el juguete,oblectamenta,le jouet,il giocattolo,il termagl,toy
+        das Buch,el libro,liber,le livre,il libro,il cudisch,book
+        das Theater,el teatro,theatrum,le théâtre,il teatro,il teater,theatre
+        die Schauspielerin,la actriz,actrix,l’actrice,l’attrice,l’actura,actress
+        die Vorführung,la actuación,spectaculum,la présention,la rappresentazione,la presentaziun,performance
+        die Sängerin,la cantante,cantatrix,la chanteuse,la cantante,la cantadura,singer
+        der Spass,la diversión,iocus,l’amusement,il divertimento,il divertiment,fun
+        die Oper,la ópera,drama musicum,l’opéra,la opera,l’opera,opera
+        das Orchester,la orquesta,symphonia,l’orchestre,l’orchestra,igl orchester,orchestra
+        die Kasse,la taquilla,fiscus,la caisse,la biglietteria,la cassa,box office
+        die Musik,la música,musica,la musique,la musica,la musica,music
+        die Freizeit,el tiempo libre,otium,les loisirs,il tempo libero,il temps liber,leisure time
+        der Spaziergang,el paseo,ambulatio,la promenade,la passeggiata,la spassegiada,walk
+        der Tanz,el baile,saltatio,la danse,il ballo,il sault,dance
+        der Fussball,el fútbol,-,le football,il calcio,il ballapei,football
+        das Fitnessstudio,el gimnasio,-,la salle de sport,il centro fitness,il studio da fitness,gym
+        der Preis,el premio,praemium,le prix,il premio,il premi,prize
+        die Weltmeisterschaft,la Copa del Mundo,-,la coupe du monde,il campionato mondiale,il campiunadi mundial,the World Cup
+        das Tor,la meta,porta,le but,la porta,il gol,goal
+    `;
+</script>
+
+<script src="script.js" defer></script>
+
+</html>
