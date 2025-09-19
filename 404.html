@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seite nicht gefunden</title>
+<style>
+    :root {
+        --primary: #111;
+        --accent: #e63946;
+        --accent-hover: #c82333;
+        --bg: #fafafa;
+        --font: system-ui, sans-serif;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: var(--bg);
+        font-family: var(--font);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: var(--primary);
+    }
+
+    .container {
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 16px;
+    }
+
+    p {
+        margin-bottom: 24px;
+        font-size: 1.1rem;
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 12px;
+        font-size: 1rem;
+        background: var(--accent);
+        color: #fff;
+        border: 2px solid var(--accent);
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.15s ease-in-out;
+    }
+
+    .button:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+    }
+
+    a {
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>404</h1>
+        <p>Oops! Die Seite konnte nicht gefunden werden.</p>
+        <a href="https://rr-utilities.github.io/hexalengua/index.html" class="button">Zur Startseite</a>
+    </div>
+</body>
+</html>
