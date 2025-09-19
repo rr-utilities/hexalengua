@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConjugationShuffler (Deutsch)</title>
+    <link rel="icon" href="../../favicon/favicon.jpg" type="image/jpg">
+    <link rel="apple-touch-icon" href="../../favicon/apple-icon.jpg">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="top-bar">
+        <a href="../index.html"> ← </a>
+        <div>ConjugationShuffler (Deutsch)</div>
+    </div>
+
+    <div class="output" id="output">
+        Drücke auf "Neue Kombination"
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="generate()">Neue Kombination</button>
+
+        <h3>Zeitformen und Co.</h3>
+        
+        <div class="options" id="zeitformen">
+            <label><input type="checkbox" value="Plusquamperfekt" checked> Plusquamperfekt</label>
+            <label><input type="checkbox" value="Imperfekt" checked> Imperfekt</label>
+            <label><input type="checkbox" value="Perfekt" checked> Perfekt</label>
+            <label><input type="checkbox" value="Präsens" checked> Präsens</label>
+            <label><input type="checkbox" value="Futur I" checked> Futur I</label>
+            <label><input type="checkbox" value="Futur II" checked> Futur II</label>
+            <label><input type="checkbox" value="Imperativ" checked> Imperativ</label>
+        </div>
+
+        <h3>Modus</h3>
+        <div class="options" id="modi">
+            <label><input type="checkbox" value="Indikativ" checked> Indikativ</label>
+            <label><input type="checkbox" value="Konjunktiv I" checked> Konjunktiv I</label>
+            <label><input type="checkbox" value="Konjunktiv II" checked> Konjunktiv II</label>
+        </div>
+
+        <div class="info-box">
+            <h3>Anleitung</h3>
+            <ul>
+                <li>Verbtabelle und…</li>
+                <li>…<a href="https://de.pons.com/verbtabellen/deutsch" target="_blank">Pons Verbtabelle</a> bereithaben.</li>
+                <li>Einige Kombinationen können unlogisch sein, d.h. neu kombinieren.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+<script>
+    const personen = [
+        "1. Person Singular", "2. Person Singular", "3. Person Singular",
+        "1. Person Plural", "2. Person Plural", "3. Person Plural"
+    ];
+
+    function generate() {
+        const zeitformen = [...document.querySelectorAll('#zeitformen input:checked')].map(cb => cb.value);
+        const modi = [...document.querySelectorAll('#modi input:checked')].map(cb => cb.value);
+
+        if (zeitformen.length === 0 && modi.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens einen Modus und eine Zeitform auswählen.";
+        return;
+        }
+
+        if (zeitformen.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens eine Zeitform auswählen.";
+        return;
+        }
+
+        if (modi.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens einen Modus auswählen.";
+        return;
+        }
+
+        const zeitform = zeitformen[Math.floor(Math.random() * zeitformen.length)];
+        const modus = modi[Math.floor(Math.random() * modi.length)];
+        const person = personen[Math.floor(Math.random() * personen.length)];
+
+        document.getElementById("output").innerText = `${person} - ${zeitform} - ${modus}`;
+    }
+</script>
+
+</html>

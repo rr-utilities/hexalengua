@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConjugationShuffler (Englisch)</title>
+    <link rel="icon" href="../../favicon/favicon.jpg" type="image/jpg">
+    <link rel="apple-touch-icon" href="../../favicon/apple-icon.jpg">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="top-bar">
+        <a href="../index.html"> ← </a>
+        <div>ConjugationShuffler (Englisch)</div>
+    </div>
+
+    <div class="output" id="output">
+        Drücke auf "Neue Kombination"
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="generate()">Neue Kombination</button>
+
+        <h3>Zeitformen und Co.</h3>
+        
+        <div class="options" id="zeitformen">
+            <label><input type="checkbox" value="Past perfect" checked> Past perfect</label>
+            <label><input type="checkbox" value="Present perfect" checked> Present perfect</label>
+            <label><input type="checkbox" value="Past" checked> Past</label>
+            <label><input type="checkbox" value="Present" checked> Present</label>
+            <label><input type="checkbox" value="will-Future" checked> will-Future</label>
+            <label><input type="checkbox" value="going to-Future" checked> going to-Future</label>
+            <label><input type="checkbox" value="Future perfect" checked> Future perfect</label>
+            <label><input type="checkbox" value="Conditional" checked> Conditional</label>
+            <label><input type="checkbox" value="Conditional past" checked> Conditional past</label>
+            <label><input type="checkbox" value="Imperative" checked> Imperative</label>
+        </div>
+
+        <h3>Modus</h3>
+        <div class="options" id="modi">
+            <label><input type="checkbox" value="Simple" checked> Simple</label>
+            <label><input type="checkbox" value="Continuous" checked> Continuous</label>
+        </div>
+
+        <div class="info-box">
+            <h3>Anleitung</h3>
+            <ul>
+                <li>Verbtabelle und…</li>
+                <li>…<a href="https://de.pons.com/verbtabellen/englisch" target="_blank">Pons Verbtabelle</a> bereithaben.</li>
+                <li>Einige Kombinationen können unlogisch sein, d.h. neu kombinieren.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+<script>
+    const personen = [
+        "1. Person Singular", "2. Person Singular", "3. Person Singular",
+        "1. Person Plural", "2. Person Plural", "3. Person Plural"
+    ];
+
+    function generate() {
+        const zeitformen = [...document.querySelectorAll('#zeitformen input:checked')].map(cb => cb.value);
+        const modi = [...document.querySelectorAll('#modi input:checked')].map(cb => cb.value);
+
+        if (zeitformen.length === 0 && modi.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens einen Modus und eine Zeitform auswählen.";
+        return;
+        }
+
+        if (zeitformen.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens eine Zeitform auswählen.";
+        return;
+        }
+
+        if (modi.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens einen Modus auswählen.";
+        return;
+        }
+
+        const zeitform = zeitformen[Math.floor(Math.random() * zeitformen.length)];
+        const modus = modi[Math.floor(Math.random() * modi.length)];
+        const person = personen[Math.floor(Math.random() * personen.length)];
+
+        document.getElementById("output").innerText = `${person} - ${zeitform} - ${modus}`;
+    }
+</script>
+
+</html>

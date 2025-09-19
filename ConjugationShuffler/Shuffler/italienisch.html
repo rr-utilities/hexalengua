@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConjugationShuffler (Italienisch)</title>
+    <link rel="icon" href="../../favicon/favicon.jpg" type="image/jpg">
+    <link rel="apple-touch-icon" href="../../favicon/apple-icon.jpg">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="top-bar">
+        <a href="../index.html"> ← </a>
+        <div>ConjugationShuffler (Italienisch)</div>
+    </div>
+
+    <div class="output" id="output">
+        Drücke auf "Neue Kombination"
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="generate()">Neue Kombination</button>
+
+        <h3>Zeitformen und Co.</h3>
+        
+        <div class="options" id="zeitformen">
+            <label><input type="checkbox" value="Trapassato prossimo" checked> Trapassato prossimo</label>
+            <label><input type="checkbox" value="Trapasso remoto" checked> Trapasso remoto</label>
+            <label><input type="checkbox" value="Imperfetto" checked> Imperfetto</label>
+            <label><input type="checkbox" value="Passato prossimo" checked> Passato prossimo</label>
+            <label><input type="checkbox" value="Passato remoto" checked> Passato remoto</label>
+            <label><input type="checkbox" value="Presente" checked> Presente</label>
+            <label><input type="checkbox" value="Futuro semplice" checked> Futuro semplice</label>
+            <label><input type="checkbox" value="Futuro anteriore" checked> Futuro anteriore</label>
+            <label><input type="checkbox" value="Condizionale presente" checked> Condizionale presente</label>
+            <label><input type="checkbox" value="Condizionale passato" checked> Condizionale passato</label>
+            <label><input type="checkbox" value="Imperativo" checked> Imperativo</label>
+        </div>
+
+        <h3>Modus</h3>
+        <div class="options" id="modi">
+            <label><input type="checkbox" value="Indicativo" checked> Indicativo</label>
+            <label><input type="checkbox" value="Congiuntivo" checked> Congiuntivo</label>
+        </div>
+
+        <div class="info-box">
+            <h3>Anleitung</h3>
+            <ul>
+                <li>Verbtabelle und…</li>
+                <li>…<a href="https://de.pons.com/verbtabellen/italienisch/" target="_blank">Pons Verbtabelle</a> bereithaben.</li>
+                <li>Einige Kombinationen können unlogisch sein, d.h. neu kombinieren.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+<script>
+    const personen = [
+        "1. Person Singular", "2. Person Singular", "3. Person Singular",
+        "1. Person Plural", "2. Person Plural", "3. Person Plural"
+    ];
+
+    function generate() {
+        const zeitformen = [...document.querySelectorAll('#zeitformen input:checked')].map(cb => cb.value);
+        const modi = [...document.querySelectorAll('#modi input:checked')].map(cb => cb.value);
+
+        if (zeitformen.length === 0 && modi.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens einen Modus und eine Zeitform auswählen.";
+        return;
+        }
+
+        if (zeitformen.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens eine Zeitform auswählen.";
+        return;
+        }
+
+        if (modi.length === 0) {
+        document.getElementById("output").innerText = "Bitte mindestens einen Modus auswählen.";
+        return;
+        }
+
+        const zeitform = zeitformen[Math.floor(Math.random() * zeitformen.length)];
+        const modus = modi[Math.floor(Math.random() * modi.length)];
+        const person = personen[Math.floor(Math.random() * personen.length)];
+
+        document.getElementById("output").innerText = `${person} - ${zeitform} - ${modus}`;
+    }
+</script>
+
+</html>
